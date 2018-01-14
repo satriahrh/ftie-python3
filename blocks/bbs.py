@@ -39,3 +39,9 @@ class BBS:
 
     def validated(self):
         return self.__validated
+
+    def next(self):
+        if self.validated():
+            self.__s = (self.__s ** 2) % self.__m
+            return self.__s
+        return None
