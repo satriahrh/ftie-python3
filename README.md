@@ -25,6 +25,11 @@ BBS proved that it is not easy to predict given polynomial time.
 Furthermore the use of ACM 2D algoritm instead of ACM 1D algorithm gives more guarantee of
 the algorithm correctness.
 
+## Research Proposal in Indonesian
+For you who willing to known more about my research, I have already done the research proposal available in Indonesia only (sad).
+Not an Indonesian, just drop a request and I will work on it :D.
+The researach proposal then available by contacting me (DM, tweet, mention or anything) via Twitter: [@SatriaHRHarsono](https://twitter.com/SatriaHRHarsono).
+
 ## Requirements
 - `python==3.5.2`
 - `nose==1.3.7`
