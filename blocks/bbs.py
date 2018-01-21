@@ -6,7 +6,7 @@ class BBS:
         self.__errors = {}
         self.__validate(p, q, s)
         if self.validated():
-            self.__m = p*q
+            self.__m = p * q
             self.__s = s
 
     def get_errors(self, key=None):
@@ -15,7 +15,7 @@ class BBS:
                 return self.__errors[key]
             return self.__errors
         except KeyError:
-            return KeyError
+            return ""
 
     def __validate(self, p, q, s):
         self.__validated = False
