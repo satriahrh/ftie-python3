@@ -26,6 +26,6 @@ Furthermore the use of ACM 2D algoritm instead of ACM 1D algorithm gives more gu
 the algorithm correctness.
 
 ## Requirements
-- `python==3.5.2`
+- `python==3.6.4`
 - `nose==1.3.7`
 - other requirements will be written soon.
