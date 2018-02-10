@@ -1,16 +1,22 @@
-def mul_gf(A, B, n):
-    if len(A[0]) != len(B):
-        raise ValueError("The number of A's column and the number of B's column is not matched")
+def mul_gf(matrix_a, matrix_b, n):
+    if len(matrix_a[0]) != len(matrix_b):
+        raise ValueError(
+            "The number of matrix_a's column and the number of matrix_b's column is not matched"
+        )
 
-    C = [
-        [0 for j in range(len(B[0]))] for i in range(len(A))
+    matrix_return = [
+        [0 for j in range(len(matrix_b[0]))] for i in range(len(matrix_a))
     ]
 
-    for i in range(len(A)):
-        # iterate through columns of B
-        for j in range(len(B[0])):
-            # iterate through rows of B
-            for k in range(len(B)):
-                C[i][j] = (C[i][j] + (A[i][k] * B[k][j]) % n) % n
+    for i in range(len(matrix_a)):
+        # iterate through columns of matrix_b
+        for j in range(len(matrix_b[0])):
+            # iterate through rows of matrix_b
+            for k in range(len(matrix_b)):
+                matrix_return[i][j] = (
+                    matrix_return[i][j]
+                    + (matrix_a[i][k] * matrix_b[k][j])
+                    % n
+                ) % n
 
-    return C
+    return matrix_return

@@ -1,23 +1,22 @@
 # this mini experiment is used to calculate size of plaintext
 
-def count_plaintext_byte_maximum_by_N(N):
-    return N ** 2 * 3 / 2
+def plaintext_by_maps_dimension(maps_dimension):
+    return maps_dimension ** 2 * 3 / 2
 
-def count_plaintext_byte_maximum_by_size(max_file_size):
-    N = 2
-    size = count_plaintext_byte_maximum_by_N(N)
+def plaintext_by_size(max_file_size):
+    maps_dimension = 2
+    size = plaintext_by_maps_dimension(maps_dimension)
     while size <= max_file_size:
-        new_N = N + 2
-        new_size = count_plaintext_byte_maximum_by_N(new_N)
-        print(new_N, new_size)
-        N = new_N
+        new_maps_dimension = maps_dimension + 2
+        new_size = plaintext_by_maps_dimension(new_maps_dimension)
+        print(new_maps_dimension, new_size)
+        maps_dimension = new_maps_dimension
         size = new_size
-    else:
-        print('The result is N={}, for |P|={}'.format(N, int(size)))
-        return N, int(size)
+    print('The result is N={}, for |P|={}'.format(maps_dimension, int(size)))
+    return maps_dimension, int(size)
 
 
 if __name__ == "__main__":
-    max_file_size = 26214400
-    N, size = count_plaintext_byte_maximum_by_size(max_file_size)  # in byte = 25 MB
-    print('difference {}'.format(abs(size-max_file_size)))
+    MAX_FILE_SIZE = 26214400
+    MAPS_DIMENSION, SIZE = plaintext_by_size(MAX_FILE_SIZE)  # in byte = 25 MB
+    print(f'difference {abs(SIZE - MAX_FILE_SIZE)}')

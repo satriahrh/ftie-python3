@@ -2,12 +2,12 @@ import suplementary.number_theory as nt
 
 
 class BBS:
-    def __init__(self, p, q, s):
+    def __init__(self, _p, _q, seed):
         self.__errors = {}
-        self.__validate(p, q, s)
+        self.__validate(_p, _q, seed)
         if self.validated():
-            self.__m = p * q
-            self.__s = s
+            self.__modulo = _p * _q
+            self.__seed = seed
 
     def get_errors(self, key=None):
         try:
@@ -17,22 +17,22 @@ class BBS:
         except KeyError:
             return ""
 
-    def __validate(self, p, q, s):
+    def __validate(self, _p, _q, seed):
         self.__validated = False
-        if p == q:
+        if _p == _q:
             self.__errors['validation'] = "p is equal to q"
             return
-        if p % 4 != 3 or q % 4 != 3:
+        if _p % 4 != 3 or _q % 4 != 3:
             self.__errors['validation'] = "p or q mod 4 are not 3"
             return
-        if not nt.is_prime(p) or not nt.is_prime(q):
+        if not nt.is_prime(_p) or not nt.is_prime(_q):
             self.__errors['validation'] = "p or q are not prime"
             return
-        if not (0 < s and s < p * q):
+        if not (seed > 0 and seed < _p * _p):
             self.__errors['validation'] = "s is to small or to big"
             return
         import math
-        if math.gcd(p * q, s) != 1:
+        if math.gcd(_p * _p, seed) != 1:
             self.__errors['validation'] = "m and s are not relatively prime"
             return
         self.__validated = True
@@ -42,6 +42,6 @@ class BBS:
 
     def next(self):
         if self.validated():
-            self.__s = (self.__s ** 2) % self.__m
-            return self.__s
+            self.__seed = (self.__seed ** 2) % self.__modulo
+            return self.__seed
         return None

@@ -2,29 +2,26 @@ from suplementary.number_theory import fibonacy
 
 
 class ACM:
-    def __init__(self, a, b, N):
+    def __init__(self, _a, _b, maps_dimension):
         """
         INPUT
         a       int
         b       int
         """
         self.__errors = {}
-        self.__validate(a, b, N)
+        self.__validate(_a, _b)
         if self.validated():
-            A = [
-                [1, a],
-                [b, 1 + a * b],
+            self.__a_matrix = [
+                [1, _a],
+                [_b, 1 + _a * _b],
             ]
             import numpy as np
-            A_i = np.linalg.inv(A).astype(int).tolist()
+            self.__a_inverse_matrix = np.linalg.inv(self.__a_matrix).astype(int).tolist()
+            self.__maps_dimension = maps_dimension
 
-            self.__A = A
-            self.__A_i = A_i
-            self.__N = N
-
-            if a == 1 and b == 1:
+            if _a == 1 and _b == 1:
                 self.__type = 0
-            elif a == b:
+            elif _a == _b:
                 self.__type = 1
             else:
                 self.__type = 2
@@ -38,9 +35,9 @@ class ACM:
         except KeyError:
             return ""
 
-    def __validate(self, a, b, N):
+    def __validate(self, _a, _b):
         self.__validated = False
-        if not (a >= 1) or not (b >= 1):
+        if (_a < 1) or (_b < 1):
             self.__errors['validation'] = \
                 "a or b is no more than 1"
             return
@@ -50,20 +47,26 @@ class ACM:
     def validated(self):
         return self.__validated
 
-    def encryption_map(self, n):
+    def encryption_map(self, number_of_iteration):
         if self.__type == 0:
-            return self.__mapping_zero(n)
+            return self.__mapping_zero(number_of_iteration)
+        return None
 
-
-    def __mapping_zero(self, n):
-        M = [
+    def __mapping_zero(self, number_of_iteration):
+        mapping = [
             [
                 [
-                    (fibonacy(2 * n - 1) * x + fibonacy(2 * n) * y) % self.__N,
-                    (fibonacy(2 * n) * x + fibonacy(2 * n + 1) * y) % self.__N
+                    (
+                        fibonacy(2 * number_of_iteration - 1) * x
+                        + fibonacy(2 * number_of_iteration) * y
+                    ) % self.__maps_dimension,
+                    (
+                        fibonacy(2 * number_of_iteration) * x
+                        + fibonacy(2 * number_of_iteration + 1) * y
+                    ) % self.__maps_dimension
                 ]
-                for y in range(self.__N)
-            ] for x in range(self.__N)
+                for y in range(self.__maps_dimension)
+            ] for x in range(self.__maps_dimension)
         ]
 
-        return M
+        return mapping
