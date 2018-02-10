@@ -35,3 +35,12 @@ The research proposal then available by contacting me (DM, tweet, mention or any
 - `nose==1.3.7`
 - `pylint==1.8.2`
 - other requirements will be written soon.
+
+## Run The Project
+Unfortunately, this project is not yet ready for production.
+But some of its units are available and tested through command `nosetests`.
+
+Documentation of each unit is not ready yet too and we are working on it :D
+
+## Help
+And yes, I am begging for your help. Just making an issue is ok tho.
