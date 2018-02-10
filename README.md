@@ -33,4 +33,5 @@ The researach proposal then available by contacting me (DM, tweet, mention or an
 ## Requirements
 - `python==3.6.4`
 - `nose==1.3.7`
+- `pylint==1.8.2`
 - other requirements will be written soon.
