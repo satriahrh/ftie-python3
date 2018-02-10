@@ -4,40 +4,39 @@ from blocks.bbs import BBS
 
 
 class TestEncryptionDecryption(unittest.TestCase):
+    def setUp(self):
+        self.__plaintext = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        self.__alice = RT(BBS(_p=7, _q=11, seed=9))
+        self.__bob = RT(BBS(_p=7, _q=11, seed=9))
+
+
     def test_encryption_succeed(self):
-        p = 7
-        q = 11
-        s = 9
-        alice = RT(BBS(p, q, s))
-        P = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-        C = alice.encrypt(P)
+        ciphertext = self.__alice.encrypt(self.__plaintext)
         message = "Encryption do not really encrypt the plaintext."
-        self.assertNotEqual(P, C, message)
+        self.assertNotEqual(self.__plaintext, ciphertext, message)
 
     def test_decryption_succeed(self):
-        p = 7
-        q = 11
-        s = 9
-        alice = RT(BBS(p, q, s))
-        bob = RT(BBS(p, q, s))
-        P = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-        C = alice.encrypt(P)
-        decrypted = bob.decrypt(C)
+        ciphertext = self.__alice.encrypt(self.__plaintext)
+        decrypted = self.__bob.decrypt(ciphertext)
         message = "Decryption failed"
-        self.assertEqual(P, decrypted, message)
+        self.assertEqual(self.__plaintext, decrypted, message)
 
 
 class TestAliceAndBob(unittest.TestCase):
+    def setUp(self):
+        self.__plaintext = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        self.__alice = RT(BBS(_p=7, _q=11, seed=9))
+        self.__bob = RT(BBS(_p=7, _q=11, seed=9))
+
+
     def test_alice_and_bob_are_swinging(self):
-        p = 7
-        q = 11
-        s = 9
-        alice = RT(BBS(p, q, s))
-        bob = RT(BBS(p, q, s))
-        P = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-        C = alice.encrypt(P)
-        bob.decrypt(C)
-        C = bob.encrypt(P)
-        decrypted = alice.decrypt(C)
+        # round 1
+        ciphertext = self.__alice.encrypt(self.__plaintext)
+        self.__bob.decrypt(ciphertext)
+
+        # round 2
+        ciphertext = self.__bob.encrypt(self.__plaintext)
+        decrypted = self.__alice.decrypt(ciphertext)
+
         message = "Alice and Bob failed in swinging"
-        self.assertEqual(P, decrypted, message)
+        self.assertEqual(self.__plaintext, decrypted, message)

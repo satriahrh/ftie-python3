@@ -30,39 +30,39 @@ class RT:
     def validated(self):
         return self.__validated
 
-    def encrypt(self, P):
+    def encrypt(self, plaintext):
         """
         INPUT
-        P   [int 0...N-1]
+        plaintext   [int 0...N-1]
         OUTPUT
-        C   [int 0...2N-2]
+        ciphertext   [int 0...2N-2]
         """
         from random import randint
-        C = []
-        for p in P:
-            r = randint(0, 256)
-            k = self.__bbs.next()
-            C.append(
-                (k + 2 * p + r) % 256
+        ciphertext = []
+        for _p in plaintext:
+            random = randint(0, 256)
+            key = self.__bbs.next()
+            ciphertext.append(
+                (key + 2 * _p + random) % 256
             )
-            C.append(
-                (2 * k + p + r) % 256
+            ciphertext.append(
+                (2 * key + _p + random) % 256
             )
 
-        return C
+        return ciphertext
 
-    def decrypt(self, C):
+    def decrypt(self, ciphertext):
         """
         INPUT
-        C   [int 0...2N-2]
+        ciphertext   [int 0...2N-2]
         OUTPUT
-        P   [int 0...N-1]
+        plaintext   [int 0...N-1]
         """
-        P = []
-        for i in range(int(len(C) / 2)):
-            k = self.__bbs.next()
-            P.append(
-                (C[2 * i] - C[2 * i + 1] + k) % 256
+        plaintext = []
+        for i in range(int(len(ciphertext) / 2)):
+            key = self.__bbs.next()
+            plaintext.append(
+                (ciphertext[2 * i] - ciphertext[2 * i + 1] + key) % 256
             )
 
-        return P
+        return plaintext

@@ -4,10 +4,10 @@ from blocks.acm import ACM
 
 class TestAcmDiscreete(unittest.TestCase):
     def setUp(self):
-        self.__acm = ACM(1,1,11)
+        self.__acm = ACM(1, 1, 11)
         self.__original_map = [
             [
-                [x,y] for y in range(11)
+                [x, y] for y in range(11)
             ] for x in range(11)
         ]
 
