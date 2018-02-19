@@ -16,7 +16,8 @@ class ACM:
                 [_b, 1 + _a * _b],
             ]
             import numpy as np
-            self.__a_inverse_matrix = np.linalg.inv(self.__a_matrix).astype(int).tolist()
+            self.__a_inverse_matrix \
+                = np.linalg.inv(self.__a_matrix).astype(int).tolist()
             self.__maps_dimension = maps_dimension
 
             if _a == 1 and _b == 1:
@@ -25,7 +26,6 @@ class ACM:
                 self.__type = 1
             else:
                 self.__type = 2
-
 
     def get_errors(self, key=None):
         try:
