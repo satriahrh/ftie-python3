@@ -99,6 +99,9 @@ def pad_numbers(numbers):
     # to be processed in numbers_to_pixels
     from math import ceil
 
+    # to make the original numbers do not get populated
+    numbers = numbers.copy()
+
     expected_len_numbers = ceil(len(numbers) / 3) * 3
 
     for i in range(len(numbers), expected_len_numbers):
@@ -110,6 +113,9 @@ def pad_numbers(numbers):
 def pad_pixels(pixels):
     # to be processed in pixels_to_matrix
     from math import ceil, sqrt
+
+    # to make the original pixels do not get populated
+    pixels = pixels.copy()
 
     expected_len_pixels = int(pow(ceil(sqrt(len(pixels))), 2))
 
