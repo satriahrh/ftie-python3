@@ -3,30 +3,44 @@ from blocks import transform as t
 
 
 class TestPadNumbersFunctioning(unittest.TestCase):
-    def test_functioning(self):
-        numbers = [
+    def setUp(self):
+        self.numbers = [
             1, 2, 3, 4
         ]
-
-        expected = [
+        self.numbers_not_padded = [
+            1, 2, 3, 4
+        ]
+        self.expected_numbers_padded = [
             1, 2, 3, 4, 0, 0
         ]
-        actual = t.pad_numbers(numbers)
-        self.assertEqual(actual, expected)
+        self.padded = t.pad_numbers(self.numbers)
+
+    def test_not_populated(self):
+        self.assertEqual(self.numbers_not_padded, self.numbers)
+
+    def test_functioning(self):
+        self.assertEqual(self.padded, self.expected_numbers_padded)
 
 
 class TestPadPixelsFunctioning(unittest.TestCase):
-    def test_functioning(self):
-        pixels = [
+    def setUp(self):
+        self.pixels = [
             (1, 2, 3), (4, 5, 6)
         ]
-
-        expected = [
+        self.pixels_not_padded = [
+            (1, 2, 3), (4, 5, 6)
+        ]
+        self.expected_pixels_padded = [
             (1, 2, 3), (4, 5, 6),
             (0, 0, 0), (0, 0, 0)
         ]
-        actual = t.pad_pixels(pixels)
-        self.assertEqual(actual, expected)
+        self.padded = t.pad_pixels(self.pixels)
+
+    def test_not_populated(self):
+        self.assertEqual(self.pixels_not_padded, self.pixels)
+
+    def test_functioning(self):
+        self.assertEqual(self.padded, self.expected_pixels_padded)
 
 
 class TestNumbersToPixelsFunctioning(unittest.TestCase):
@@ -94,20 +108,26 @@ class TestReversing(unittest.TestCase):
         self.numbers = [
             1, 2, 3, 4, 5, 6, 7
         ]
-
-    def test_reversing(self):
-        numbers = self.numbers.copy()
-
-        numbers_reversed = \
+        self.numbers_reversed = \
             t.pixels_to_numbers(
                 t.matrix_to_pixels(
                     t.image_to_matrix(
                         t.matrix_to_image(
                             t.pixels_to_matrix(
-                                t.numbers_to_pixels(numbers)
+                                t.numbers_to_pixels(self.numbers)
                             )
                         )
                     )
                 )
             )
-        self.assertEqual(self.numbers, numbers_reversed[:len(self.numbers)])
+
+    def test_reversing(self):
+        self.assertEqual(
+            self.numbers,
+            self.numbers_reversed[:len(self.numbers)]
+        )
+
+        self.subTest(self)
+
+    def test_len(self):
+        self.assertEqual(12, len(self.numbers_reversed))
