@@ -1,6 +1,7 @@
 import unittest
 import suplementary.matrix as mt
 
+
 class TestMulGf(unittest.TestCase):
     def test_simple(self):
         matrix_a = [

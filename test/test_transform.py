@@ -47,7 +47,7 @@ class TestPadPixelsFunctioning(unittest.TestCase):
     def test_functioning_len_none(self):
         self.assertEqual(self.padded, self.expected_pixels_padded)
 
-    def test_functioning_len_none(self):
+    def test_functioning_len(self):
         self.assertEqual(self.padded_with_len, self.expected_pixels_padded_len)
 
 

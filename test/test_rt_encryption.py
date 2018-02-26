@@ -9,7 +9,6 @@ class TestEncryptionDecryption(unittest.TestCase):
         self.__alice = RT(BBS(_p=7, _q=11, seed=9))
         self.__bob = RT(BBS(_p=7, _q=11, seed=9))
 
-
     def test_encryption_succeed(self):
         ciphertext = self.__alice.encrypt(self.__plaintext)
         message = "Encryption do not really encrypt the plaintext."
@@ -27,7 +26,6 @@ class TestAliceAndBob(unittest.TestCase):
         self.__plaintext = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
         self.__alice = RT(BBS(_p=7, _q=11, seed=9))
         self.__bob = RT(BBS(_p=7, _q=11, seed=9))
-
 
     def test_alice_and_bob_are_swinging(self):
         # round 1

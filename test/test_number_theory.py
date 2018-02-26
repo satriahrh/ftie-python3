@@ -1,6 +1,7 @@
 import unittest
 import suplementary.number_theory as nt
 
+
 class TestIsPrime(unittest.TestCase):
     def test_p_is_prime(self):
         actual = nt.is_prime(_p=5)

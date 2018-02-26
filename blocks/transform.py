@@ -110,8 +110,7 @@ def pad_numbers(numbers):
 
     expected_len_numbers = ceil(len(numbers) / 3) * 3
 
-    for i in range(len(numbers), expected_len_numbers):
-        numbers.append(0)
+    numbers += [0 for i in range(len(numbers), expected_len_numbers)]
 
     return numbers
 
@@ -126,7 +125,6 @@ def pad_pixels(pixels, expected_len_pixels=None):
     if expected_len_pixels is None:
         expected_len_pixels = int(pow(ceil(sqrt(len(pixels))), 2))
 
-    for i in range(len(pixels), expected_len_pixels):
-        pixels.append((0, 0, 0))
+    pixels += [(0, 0, 0) for i in range(len(pixels), expected_len_pixels)]
 
     return pixels
