@@ -34,13 +34,21 @@ class TestPadPixelsFunctioning(unittest.TestCase):
             (1, 2, 3), (4, 5, 6),
             (0, 0, 0), (0, 0, 0)
         ]
+        self.expected_pixels_padded_len = [
+            (1, 2, 3), (4, 5, 6),
+            (0, 0, 0)
+        ]
         self.padded = t.pad_pixels(self.pixels)
+        self.padded_with_len = t.pad_pixels(self.pixels, 3)
 
     def test_not_populated(self):
         self.assertEqual(self.pixels_not_padded, self.pixels)
 
-    def test_functioning(self):
+    def test_functioning_len_none(self):
         self.assertEqual(self.padded, self.expected_pixels_padded)
+
+    def test_functioning_len_none(self):
+        self.assertEqual(self.padded_with_len, self.expected_pixels_padded_len)
 
 
 class TestNumbersToPixelsFunctioning(unittest.TestCase):
@@ -57,20 +65,36 @@ class TestNumbersToPixelsFunctioning(unittest.TestCase):
 
 
 class TestPixelsToMatrixFunctioning(unittest.TestCase):
-    def test_functioning(self):
-        pixels = [
+    def setUp(self):
+        self.pixels = [
             (1, 2, 3), (4, 5, 6), (7, 8, 9), (10, 11, 12)
         ]
-
-        expected = [
+        self.expected_n_none = [
             [
                 (1, 2, 3), (4, 5, 6)
             ], [
                 (7, 8, 9), (10, 11, 12)
             ]
         ]
-        actual = t.pixels_to_matrix(pixels)
-        self.assertEqual(actual, expected)
+        self.expected_n = [
+            [
+                (1, 2, 3), (4, 5, 6), (7, 8, 9)
+            ], [
+                (10, 11, 12), (0, 0, 0), (0, 0, 0)
+            ], [
+                (0, 0, 0), (0, 0, 0), (0, 0, 0)
+            ]
+        ]
+
+    def test_functioning_n_none(self):
+        actual = t.pixels_to_matrix(self.pixels)
+        self.assertEqual(actual, self.expected_n_none)
+
+    def test_functioning_len(self):
+        n_matrix = 3
+
+        actual = t.pixels_to_matrix(self.pixels, n_matrix)
+        self.assertEqual(actual, self.expected_n)
 
 
 class TestMatrixToPixelsFunctioning(unittest.TestCase):
