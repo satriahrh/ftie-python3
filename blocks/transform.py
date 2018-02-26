@@ -24,11 +24,17 @@ def numbers_to_pixels(numbers):
     return pixels
 
 
-def pixels_to_matrix(pixels):
+def pixels_to_matrix(pixels, n_matrix=None):
     from math import sqrt
-    pixels = pad_pixels(pixels)
+    len_pixels = None
 
-    n_matrix = int(sqrt(len(pixels)))
+    if n_matrix is not None:
+        len_pixels = int(n_matrix ** 2)
+        pixels = pad_pixels(pixels, len_pixels)
+    else:
+        pixels = pad_pixels(pixels, len_pixels)
+        n_matrix = int(sqrt(len(pixels)))
+
     matrix = [
         [
             pixels[n_matrix * x + y] for y in range(n_matrix)
@@ -110,14 +116,15 @@ def pad_numbers(numbers):
     return numbers
 
 
-def pad_pixels(pixels):
+def pad_pixels(pixels, expected_len_pixels=None):
     # to be processed in pixels_to_matrix
     from math import ceil, sqrt
 
     # to make the original pixels do not get populated
     pixels = pixels.copy()
 
-    expected_len_pixels = int(pow(ceil(sqrt(len(pixels))), 2))
+    if expected_len_pixels is None:
+        expected_len_pixels = int(pow(ceil(sqrt(len(pixels))), 2))
 
     for i in range(len(pixels), expected_len_pixels):
         pixels.append((0, 0, 0))
