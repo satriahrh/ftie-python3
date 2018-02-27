@@ -56,13 +56,12 @@ class ACM:
             if (N - 3) % 10 == 0 or (N + 3) % 10 == 0:
                 return N + 1
             elif (N - 1) % 10 == 0 or (N + 1) % 10 == 0:
-                return (N - 1) / 2
+                return int((N - 1) / 2)
         return 1
 
     def __expect_number_of_iteration(self, number_of_iteration):
         if number_of_iteration is None:
             if self.__period is not None:
-                print(self.__period)
                 return self.__period - 1
             return 1
         return number_of_iteration
