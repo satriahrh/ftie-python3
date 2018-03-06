@@ -2,18 +2,6 @@ import unittest
 from blocks.bbs import BBS
 
 
-class TestFailureCreation(unittest.TestCase):
-    def test_creation_failed(self):
-        bbs = BBS(_p=7, _q=11, seed=7)
-        actual = bbs.next()
-        self.assertIsNone(actual)
-
-    def test_creation_succeed(self):
-        bbs = BBS(_p=7, _q=11, seed=9)
-        actual = bbs.next()
-        self.assertIsNotNone(actual)
-
-
 class TestGenerationInduction(unittest.TestCase):
     # profing by mathematical induction for i >= 1
 
