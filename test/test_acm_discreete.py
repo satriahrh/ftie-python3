@@ -3,18 +3,16 @@ from blocks.acm import ACM
 
 
 class TestAcmDiscreete(unittest.TestCase):
-    def create_simple_map(self, maps_dimension):
-        return [
+    def setUp(self):
+        self.create_simple_map = lambda maps_dimension: [
             [
                 [x, y] for y in range(maps_dimension)
             ] for x in range(maps_dimension)
         ]
-
-    def create_simple_message(self, maps_dimension):
-        return [
+        self.create_simple_message = lambda message_dimension: [
             [
-                10 * x + y for y in range(maps_dimension)
-            ] for x in range(maps_dimension)
+                10 * x + y for y in range(message_dimension)
+            ] for x in range(message_dimension)
         ]
 
     def test_type_zero_period(self):
