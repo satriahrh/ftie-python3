@@ -1,4 +1,5 @@
 from suplementary.number_theory import fibonacy
+from errors import ValidationError
 
 
 class ACM:
@@ -8,45 +9,30 @@ class ACM:
         a       int
         b       int
         """
-        self.__errors = {}
         self.__validate(_a, _b)
-        if self.validated():
-            self.__a_matrix = [
-                [1, _a],
-                [_b, 1 + _a * _b],
-            ]
-            import numpy as np
-            self.__a_inverse_matrix \
-                = np.linalg.inv(self.__a_matrix).astype(int).tolist()
-            self.__number_of_iteration = number_of_iteration
-            self.__map = {}
+        self.__a_matrix = [
+            [1, _a],
+            [_b, 1 + _a * _b],
+        ]
+        import numpy as np
+        self.__a_inverse_matrix \
+            = np.linalg.inv(self.__a_matrix).astype(int).tolist()
+        self.__number_of_iteration = number_of_iteration
+        self.__map = {}
 
-            if _a == 1 and _b == 1:
-                self.__type = 0
-            elif _a == _b:
-                self.__type = 1
-            else:
-                self.__type = 2
-
-    def get_errors(self, key=None):
-        try:
-            if key:
-                return self.__errors[key]
-            return self.__errors
-        except KeyError:
-            return ""
+        if _a == 1 and _b == 1:
+            self.__type = 0
+        elif _a == _b:
+            self.__type = 1
+        else:
+            self.__type = 2
 
     def __validate(self, _a, _b):
-        self.__validated = False
         if (_a < 1) or (_b < 1):
-            self.__errors['validation'] = \
+            raise ValidationError(
+                "Try different pairs of a and b",
                 "a or b is no more than 1"
-            return
-
-        self.__validated = True
-
-    def validated(self):
-        return self.__validated
+            )
 
     def get_map(self, maps_dimension):
 
