@@ -4,11 +4,6 @@ import suplementary.number_theory as nt
 
 class BBS:
     def __init__(self, _p, _q, seed):
-        self.__validate(_p, _q, seed)
-        self.__modulo = _p * _q
-        self.__seed = seed
-
-    def __validate(self, _p, _q, seed):
         if _p == _q:
             raise ValidationError(
                 "Try different pairs of p and q",
@@ -35,6 +30,9 @@ class BBS:
                 "Try different pairs of p and q",
                 "(p * q) and s are not relatively prime"
             )
+
+        self.__modulo = _p * _q
+        self.__seed = seed
 
     def next(self):
         self.__seed = (self.__seed ** 2) % self.__modulo

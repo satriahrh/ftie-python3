@@ -9,7 +9,12 @@ class ACM:
         a       int
         b       int
         """
-        self.__validate(_a, _b)
+        if (_a < 1) or (_b < 1):
+            raise ValidationError(
+                "Try different pairs of a and b",
+                "a or b is no more than 1"
+            )
+
         self.__a_matrix = [
             [1, _a],
             [_b, 1 + _a * _b],
@@ -27,15 +32,7 @@ class ACM:
         else:
             self.__type = 2
 
-    def __validate(self, _a, _b):
-        if (_a < 1) or (_b < 1):
-            raise ValidationError(
-                "Try different pairs of a and b",
-                "a or b is no more than 1"
-            )
-
     def get_map(self, maps_dimension):
-
         try:
             return self.__map[maps_dimension]
         except KeyError:
@@ -67,7 +64,6 @@ class ACM:
         return mapping
 
     def encrypt(self, matrix):
-
         if len(matrix) != len(matrix[0]):
             print("ACM needs square matrix")
             return
