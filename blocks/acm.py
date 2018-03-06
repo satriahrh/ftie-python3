@@ -95,7 +95,6 @@ class ACM:
                 xy = maps[x][y]
                 ret[x].append(matrix[xy[0]][xy[1]])
 
-        print(ret)
         return ret
 
     def decrypt(self, matrix):
@@ -115,5 +114,4 @@ class ACM:
                 xy = maps[x][y]
                 ret[xy[0]][xy[1]] = matrix[x][y]
 
-        print(ret)
         return ret
