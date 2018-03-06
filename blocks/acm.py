@@ -45,6 +45,12 @@ class ACM:
             return ret
 
     def __mapping_zero(self, maps_dimension):
+        if maps_dimension < 2:
+            raise ValidationError(
+                "Try different maps_dimension",
+                "maps_dimension is to little"
+            )
+
         mapping = [
             [
                 [
