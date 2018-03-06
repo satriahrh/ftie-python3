@@ -1,47 +1,41 @@
+from errors import ValidationError
 import suplementary.number_theory as nt
 
 
 class BBS:
     def __init__(self, _p, _q, seed):
-        self.__errors = {}
         self.__validate(_p, _q, seed)
-        if self.validated():
-            self.__modulo = _p * _q
-            self.__seed = seed
-
-    def get_errors(self, key=None):
-        try:
-            if key:
-                return self.__errors[key]
-            return self.__errors
-        except KeyError:
-            return ""
+        self.__modulo = _p * _q
+        self.__seed = seed
 
     def __validate(self, _p, _q, seed):
-        self.__validated = False
         if _p == _q:
-            self.__errors['validation'] = "p is equal to q"
-            return
+            raise ValidationError(
+                "Try different pairs of p and q",
+                "p is equal to q"
+            )
         if _p % 4 != 3 or _q % 4 != 3:
-            self.__errors['validation'] = "p or q mod 4 are not 3"
-            return
+            raise ValidationError(
+                "Try different pairs of p and q",
+                "p or q mod 4 are not 3"
+            )
         if not nt.is_prime(_p) or not nt.is_prime(_q):
-            self.__errors['validation'] = "p or q are not prime"
-            return
+            raise ValidationError(
+                "Try different pairs of p and q",
+                "p or q are not prime"
+            )
         if not (seed > 0 and seed < _p * _p):
-            self.__errors['validation'] = "s is to small or to big"
-            return
+            raise ValidationError(
+                "Try different pairs of p and q",
+                "s is to small or to big"
+            )
         import math
         if math.gcd(_p * _p, seed) != 1:
-            self.__errors['validation'] = "m and s are not relatively prime"
-            return
-        self.__validated = True
-
-    def validated(self):
-        return self.__validated
+            raise ValidationError(
+                "Try different pairs of p and q",
+                "(p * q) and s are not relatively prime"
+            )
 
     def next(self):
-        if self.validated():
-            self.__seed = (self.__seed ** 2) % self.__modulo
-            return self.__seed
-        return None
+        self.__seed = (self.__seed ** 2) % self.__modulo
+        return self.__seed
