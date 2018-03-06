@@ -2,7 +2,7 @@ from suplementary.number_theory import fibonacy
 
 
 class ACM:
-    def __init__(self, _a, _b, maps_dimension):
+    def __init__(self, _a, _b, number_of_iteration):
         """
         INPUT
         a       int
@@ -18,13 +18,11 @@ class ACM:
             import numpy as np
             self.__a_inverse_matrix \
                 = np.linalg.inv(self.__a_matrix).astype(int).tolist()
-            self.__maps_dimension = maps_dimension
+            self.__number_of_iteration = number_of_iteration
             self.__map = {}
-            self.__period = None
 
             if _a == 1 and _b == 1:
                 self.__type = 0
-                self.__period = self.__expect_period()
             elif _a == _b:
                 self.__type = 1
             else:
@@ -50,84 +48,69 @@ class ACM:
     def validated(self):
         return self.__validated
 
-    def __expect_period(self):
-        N = self.__maps_dimension
-        if self.__type == 0:
-            if (N - 3) % 10 == 0 or (N + 3) % 10 == 0:
-                return N + 1
-            elif (N - 1) % 10 == 0 or (N + 1) % 10 == 0:
-                return int((N - 1) / 2)
-        return 1
-
-    def __expect_number_of_iteration(self, number_of_iteration):
-        if number_of_iteration is None:
-            if self.__period is not None:
-                return self.__period - 1
-            return 1
-        return number_of_iteration
-
-    def get_map(self, number_of_iteration=None):
-        number_of_iteration \
-            = self.__expect_number_of_iteration(number_of_iteration)
+    def get_map(self, maps_dimension):
 
         try:
-            return self.__map[number_of_iteration]
+            return self.__map[maps_dimension]
         except KeyError:
             ret = None
 
             if self.__type == 0:
-                ret = self.__mapping_zero(number_of_iteration)
+                ret = self.__mapping_zero(maps_dimension)
 
-            self.__map[number_of_iteration] = ret
+            self.__map[maps_dimension] = ret
             return ret
 
-    def __mapping_zero(self, number_of_iteration=None):
-        number_of_iteration \
-            = self.__expect_number_of_iteration(number_of_iteration)
-
+    def __mapping_zero(self, maps_dimension):
         mapping = [
             [
                 [
                     (
-                        fibonacy(2 * number_of_iteration - 1) * x
-                        + fibonacy(2 * number_of_iteration) * y
-                    ) % self.__maps_dimension,
+                        fibonacy(2 * self.__number_of_iteration - 1) * x
+                        + fibonacy(2 * self.__number_of_iteration) * y
+                    ) % maps_dimension,
                     (
-                        fibonacy(2 * number_of_iteration) * x
-                        + fibonacy(2 * number_of_iteration + 1) * y
-                    ) % self.__maps_dimension
+                        fibonacy(2 * self.__number_of_iteration) * x
+                        + fibonacy(2 * self.__number_of_iteration + 1) * y
+                    ) % maps_dimension
                 ]
-                for y in range(self.__maps_dimension)
-            ] for x in range(self.__maps_dimension)
+                for y in range(maps_dimension)
+            ] for x in range(maps_dimension)
         ]
 
         return mapping
 
-    def encrypt(self, matrix, number_of_iteration=None):
-        number_of_iteration \
-            = self.__expect_number_of_iteration(number_of_iteration)
+    def encrypt(self, matrix):
 
-        maps = self.get_map(number_of_iteration)
+        if len(matrix) != len(matrix[0]):
+            print("ACM needs square matrix")
+            return
+        maps_dimension = len(matrix)
+        maps = self.get_map(maps_dimension)
 
         ret = []
-        for x in range(self.__maps_dimension):
+        for x in range(maps_dimension):
             ret.append([])
-            for y in range(self.__maps_dimension):
+            for y in range(maps_dimension):
                 xy = maps[x][y]
                 ret[x].append(matrix[xy[0]][xy[1]])
 
         return ret
 
-    def decrypt(self, matrix, number_of_iteration=None):
-        maps = self.get_map(number_of_iteration)
+    def decrypt(self, matrix):
+        if len(matrix) != len(matrix[0]):
+            print("ACM needs square matrix")
+            return
+        maps_dimension = len(matrix)
+        maps = self.get_map(maps_dimension)
 
         ret = [
-            [None for y in range(self.__maps_dimension)]
-            for x in range(self.__maps_dimension)
+            [None for y in range(maps_dimension)]
+            for x in range(maps_dimension)
         ]
 
-        for x in range(self.__maps_dimension):
-            for y in range(self.__maps_dimension):
+        for x in range(maps_dimension):
+            for y in range(maps_dimension):
                 xy = maps[x][y]
                 ret[xy[0]][xy[1]] = matrix[x][y]
 
