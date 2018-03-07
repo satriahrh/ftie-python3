@@ -1,5 +1,6 @@
 import unittest
 from blocks import transform as t
+from errors import ValidationError
 
 
 class TestPadNumbersFunctioning(unittest.TestCase):
@@ -14,6 +15,13 @@ class TestPadNumbersFunctioning(unittest.TestCase):
             1, 2, 3, 4, 0, 0
         ]
         self.padded = t.pad_numbers(self.numbers)
+
+    def test_numbers_is_not_array(self):
+        with self.assertRaises(ValidationError) as err:
+            t.pad_numbers("123")
+        self.assertEqual(
+            err.exception.errors, "numbers is not array like"
+        )
 
     def test_not_populated(self):
         self.assertEqual(self.numbers_not_padded, self.numbers)
