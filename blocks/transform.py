@@ -1,3 +1,6 @@
+from errors import ValidationError
+
+
 def file_to_numbers(file_path):
     numbers = []
     with open(file_path, "rb") as fstream:
@@ -11,6 +14,12 @@ def file_to_numbers(file_path):
 
 
 def numbers_to_pixels(numbers):
+    if type(numbers) == list or type(numbers) == tuple:
+        raise ValidationError(
+            "Try another input: array like (list or tuple) of int",
+            "numbers is not array like"
+        )
+
     numbers = pad_numbers(numbers)
 
     pixels = []
