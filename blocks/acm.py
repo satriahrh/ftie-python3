@@ -1,5 +1,5 @@
 from suplementary.number_theory import fibonacy
-from errors import ValidationError
+from errors import ValidationError, DiscoveryError
 
 
 class ACM:
@@ -9,7 +9,17 @@ class ACM:
         a       int
         b       int
         """
-        self.__validate(_a, _b)
+        if (_a < 1) or (_b < 1):
+            raise ValidationError(
+                "Try different pairs of a and b",
+                "a or b is no more than 1"
+            )
+        if number_of_iteration < 1:
+            raise ValidationError(
+                "Try different number_of_iteration",
+                "number_of_iteration is too small"
+            )
+
         self.__a_matrix = [
             [1, _a],
             [_b, 1 + _a * _b],
@@ -27,18 +37,17 @@ class ACM:
         else:
             self.__type = 2
 
-    def __validate(self, _a, _b):
-        if (_a < 1) or (_b < 1):
-            raise ValidationError(
-                "Try different pairs of a and b",
-                "a or b is no more than 1"
-            )
-
+    # TODO to private function
     def get_map(self, maps_dimension):
-
         try:
             return self.__map[maps_dimension]
         except KeyError:
+            if maps_dimension < 2:
+                raise ValidationError(
+                    "Try different maps_dimension",
+                    "maps_dimension is too small"
+                )
+
             ret = None
 
             if self.__type == 0:
@@ -66,27 +75,52 @@ class ACM:
 
         return mapping
 
-    def encrypt(self, matrix):
+    def __check_input_matrix(self, matrix):
+        row_count = len(matrix[0])
+        column_count = len(matrix)
 
-        if len(matrix) != len(matrix[0]):
-            print("ACM needs square matrix")
-            return
+        if row_count != column_count:
+            raise ValidationError(
+                "Try different matrix",
+                "matrix is not a square matrix"
+            )
+
+        if row_count < 2:
+            raise ValidationError(
+                "Try different maps_dimension",
+                "maps_dimension is too small"
+            )
+
+    def encrypt(self, matrix):
+        self.__check_input_matrix(matrix)
+
         maps_dimension = len(matrix)
         maps = self.get_map(maps_dimension)
 
         ret = []
-        for x in range(maps_dimension):
+        for x, row in enumerate(matrix):
+            len_row = len(row)
+            if len_row != maps_dimension:
+                raise DiscoveryError(
+                    "Try another matrix",
+                    "this is not a consistent matrix"
+                )
             ret.append([])
-            for y in range(maps_dimension):
-                xy = maps[x][y]
-                ret[x].append(matrix[xy[0]][xy[1]])
+            for y in range(len_row):
+                try:
+                    _map = maps[x][y]
+                    ret[x].append(matrix[_map[0]][_map[1]])
+                except IndexError:
+                    raise DiscoveryError(
+                        "Try another matrix",
+                        "this is not a consistent matrix"
+                    )
 
         return ret
 
     def decrypt(self, matrix):
-        if len(matrix) != len(matrix[0]):
-            print("ACM needs square matrix")
-            return
+        self.__check_input_matrix(matrix)
+
         maps_dimension = len(matrix)
         maps = self.get_map(maps_dimension)
 
@@ -95,9 +129,21 @@ class ACM:
             for x in range(maps_dimension)
         ]
 
-        for x in range(maps_dimension):
-            for y in range(maps_dimension):
-                xy = maps[x][y]
-                ret[xy[0]][xy[1]] = matrix[x][y]
+        for x, row in enumerate(matrix):
+            len_row = len(row)
+            if len_row != maps_dimension:
+                raise DiscoveryError(
+                    "Try another matrix",
+                    "this is not a consistent matrix"
+                )
+            for y in range(len_row):
+                try:
+                    _map = maps[x][y]
+                    ret[_map[0]][_map[1]] = matrix[x][y]
+                except IndexError:
+                    raise DiscoveryError(
+                        "Try another matrix",
+                        "this is not a consistent matrix"
+                    )
 
         return ret
