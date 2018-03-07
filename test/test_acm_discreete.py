@@ -29,6 +29,12 @@ class TestAcmDiscreete(unittest.TestCase):
 
     def test_encrypt_decrypt(self):
         acm = ACM(_a=1, _b=1, number_of_iteration=1)
-        actual = acm.decrypt(acm.encrypt(self.create_simple_message(7)))
+        ciphertext = acm.encrypt(self.create_simple_message(7))
+        actual = acm.decrypt(ciphertext)
         expected = self.create_simple_message(7)
+        print(ciphertext)
+        print()
+        print(actual)
+        print()
+        print(expected)
         self.assertEqual(actual, expected)
