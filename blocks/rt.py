@@ -1,9 +1,18 @@
+from blocks.bbs import BBS
+from errors import ValidationError
+
+
 class RT:
     def __init__(self, bbs):
         """
         INPUT
         bbs         blocks.bbs.BBS
         """
+        if type(bbs) != BBS:
+            raise ValidationError(
+                "Create a right bbs",
+                "bbs is not BBS type"
+            )
         self.__bbs = bbs
 
     def encrypt(self, plaintext):
