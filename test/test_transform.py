@@ -2,6 +2,15 @@ import unittest
 from blocks import transform as t
 
 
+class TestPadBytesFunctioning(unittest.TestCase):
+    def test_functioning(self):
+        bts = b'1234'
+        expected = b'1234\x00\x00'
+
+        actual = t.pad_bytes(bts)
+        self.assertEqual(expected, actual)
+
+
 class TestPadNumbersFunctioning(unittest.TestCase):
     def setUp(self):
         self.numbers = [

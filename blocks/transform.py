@@ -96,6 +96,28 @@ def numbers_to_file(numbers, file_path):
 
 
 # PADDING
+def pad_bytes(bts):
+    from math import ceil, sqrt
+
+    len_bts = len(bts)
+    len_rdt = len_bts * 2
+
+    n_matrix = ceil(sqrt(len_rdt / 3))
+    if n_matrix % 2 == 1:
+        n_matrix += 1
+
+    amount_of_padding = ceil(
+        (
+            (n_matrix ** 2) * 3
+            - len_rdt
+        ) / 2
+    )
+
+    bts += bytes(amount_of_padding)
+
+    return bts
+
+
 def pad_numbers(numbers):
     # to be processed in numbers_to_pixels
     from math import ceil
