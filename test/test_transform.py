@@ -31,6 +31,23 @@ class TestCompileBytesToPixelsFunctioning(unittest.TestCase):
         self.assertEqual(actual, expected)
 
 
+class TestCompilePixelsToMatrixFunctioning(unittest.TestCase):
+    def test_functioning(self):
+        pixels = [
+            (48, 49, 50), (51, 52, 53), (54, 55, 56), (57, 65, 66)
+        ]
+        expected = [
+            [
+                (48, 49, 50), (51, 52, 53)
+            ], [
+                (54, 55, 56), (57, 65, 66)
+            ]
+        ]
+
+        actual = t.compile_pixels_to_matrix(pixels)
+        self.assertEqual(actual, expected)
+
+
 class TestPadNumbersFunctioning(unittest.TestCase):
     def setUp(self):
         self.numbers = [

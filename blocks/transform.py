@@ -1,3 +1,5 @@
+from errors import ValidationError
+
 def file_to_bytes(filepath):
     with open(filepath, 'rb') as fstream:
         byte_array = fstream.read()
@@ -16,6 +18,29 @@ def compile_bytes_to_pixels(bts):
         ))
 
     return pixels
+
+
+def compile_pixels_to_matrix(pixels):
+    from math import sqrt
+
+    n_matrix = sqrt(len(pixels))
+    # TODO create unittest for this raise
+    if n_matrix % 1 != 0:
+        raise ValidationError(
+            "Try another pixels",
+            "len(pixels) is not a quadratic number"
+        )
+
+    n_matrix = int(n_matrix)
+
+    matrix = [
+        [
+            pixels[n_matrix * x + y] for y in range(n_matrix)
+        ]
+        for x in range(n_matrix)
+    ]
+
+    return matrix
 
 
 def numbers_to_pixels(numbers):
