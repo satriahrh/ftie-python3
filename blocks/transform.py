@@ -144,10 +144,9 @@ def pixels_to_numbers(pixels):
     return numbers
 
 
-def numbers_to_file(numbers, file_path):
+def bytes_to_file(bts, file_path):
     with open(file_path, "wb") as fstream:
-        for number in numbers:
-            fstream.write(number.to_bytes(1, "little", signed=False))
+        fstream.write(bts)
 
     return file_path
 
