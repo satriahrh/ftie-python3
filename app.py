@@ -26,10 +26,8 @@ class Application:
         else:
             cipherimage_filepath = plainfile_filepath + ".bmp"
 
-        plainfile_fstream = open(plainfile_filepath, mode='rb')
-
         # TRANSFORMATION
-        list_of_byte = transform.fstream_to_bytes(plainfile_fstream)
+        list_of_byte = transform.file_to_bytes(plainfile_filepath)
         print(len(list_of_byte))
 
         # RANDOMIZE TEXT
