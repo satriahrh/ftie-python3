@@ -145,3 +145,13 @@ def pad_pixels(pixels, expected_len_pixels=None):
     pixels += [(0, 0, 0) for i in range(len(pixels), expected_len_pixels)]
 
     return pixels
+
+
+# STRIP
+def strip_bytes(bts):
+    to = len(bts)
+
+    while bts[to - 1] == 0:
+        to -= 1
+
+    return bts[:to]
