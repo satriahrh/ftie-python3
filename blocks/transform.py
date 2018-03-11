@@ -1,13 +1,8 @@
 def file_to_bytes(filepath):
     with open(filepath, 'rb') as fstream:
-        numbers = []
-        byte = fstream.read(1)
-        while byte != b'':
-            number = ord(byte)
-            numbers.append(number)
-            byte = fstream.read(1)
+        byte_array = fstream.read()
 
-    return numbers
+    return byte_array
 
 
 def numbers_to_pixels(numbers):
