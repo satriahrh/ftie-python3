@@ -1,11 +1,10 @@
-def file_to_numbers(file_path):
+def fstream_to_bytes(fstream):
     numbers = []
-    with open(file_path, "rb") as fstream:
+    byte = fstream.read(1)
+    while byte != b'':
+        number = ord(byte)
+        numbers.append(number)
         byte = fstream.read(1)
-        while byte != b'':
-            number = ord(byte)
-            numbers.append(number)
-            byte = fstream.read(1)
 
     return numbers
 
