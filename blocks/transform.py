@@ -5,6 +5,19 @@ def file_to_bytes(filepath):
     return byte_array
 
 
+def compile_bytes_to_pixels(bts):
+    pixels = []
+
+    for i in range(int(len(bts) / 3)):
+        pixels.append((
+            bts[3 * i],
+            bts[3 * i + 1],
+            bts[3 * i + 2],
+        ))
+
+    return pixels
+
+
 def numbers_to_pixels(numbers):
     numbers = pad_numbers(numbers)
 

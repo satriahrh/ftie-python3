@@ -20,6 +20,17 @@ class TestPadStripBytesFunctioning(unittest.TestCase):
         )
 
 
+class TestCompileBytesToPixelsFunctioning(unittest.TestCase):
+    def test_functioning(self):
+        bts = b'0123456789AB'
+        expected = [
+            (48, 49, 50), (51, 52, 53), (54, 55, 56), (57, 65, 66)
+        ]
+
+        actual = t.compile_bytes_to_pixels(bts)
+        self.assertEqual(actual, expected)
+
+
 class TestPadNumbersFunctioning(unittest.TestCase):
     def setUp(self):
         self.numbers = [
