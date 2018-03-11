@@ -203,29 +203,30 @@ class TestPixelsToNumbersFunctioning(unittest.TestCase):
 
 class TestReversing(unittest.TestCase):
     def setUp(self):
-        self.numbers = [
-            1, 2, 3, 4, 5, 6, 7
-        ]
-        self.numbers_reversed = \
-            t.pixels_to_numbers(
-                t.matrix_to_pixels(
-                    t.image_to_matrix(
-                        t.matrix_to_image(
-                            t.pixels_to_matrix(
-                                t.numbers_to_pixels(self.numbers)
+        from math import ceil
+
+        self.bts = b'1234'
+
+        temp = t.decompile_pixels_to_bytes(
+            t.decompile_matrix_to_pixels(
+                t.image_to_matrix(
+                    t.matrix_to_image(
+                        t.compile_pixels_to_matrix(
+                            t.compile_bytes_to_pixels(
+                                t.pad_bytes(self.bts) * 2
                             )
                         )
                     )
                 )
             )
+        )
+        self.bts_reversed = \
+            t.strip_bytes(
+                temp[:ceil(len(temp)/2)]
+            )
 
     def test_reversing(self):
         self.assertEqual(
-            self.numbers,
-            self.numbers_reversed[:len(self.numbers)]
+            self.bts,
+            self.bts_reversed
         )
-
-        self.subTest(self)
-
-    def test_len(self):
-        self.assertEqual(12, len(self.numbers_reversed))
