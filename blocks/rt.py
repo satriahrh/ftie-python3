@@ -15,57 +15,58 @@ class RT:
             )
         self.__bbs = bbs
 
-    def encrypt(self, plaintext):
+    def encrypt(self, plainbytes):
         """
         INPUT
-        plaintext   [int 0...N-1]
+        plainbytes    bytes which length is N
         OUTPUT
-        ciphertext   [int 0...2N-2]
+        randomized_bytes   bytes [which length is 2N
         """
+        if type(plainbytes) is not bytes:
+            raise ValidationError(
+                "Try another plainbytes",
+                "plainbytes is not bytes type"
+            )
         from random import randint
-        ciphertext = []
-        for _p in plaintext:
-            try:
-                random = randint(0, 256)
-                key = self.__bbs.next()
-                ciphertext.append(
-                    (key + 2 * _p + random) % 256
-                )
-                ciphertext.append(
-                    (2 * key + _p + random) % 256
-                )
-            except TypeError:
-                raise DiscoveryError(
-                    "Try another plaintext that is an array like of integer",
-                    "input is not an array of integer"
-                )
+        randomized_bytes = bytearray()
+        for byte in plainbytes:
+            random = randint(0, 256)
+            key = self.__bbs.next()
+            randomized_bytes.append(
+                (key + 2 * byte + random) % 256
+            )
+            randomized_bytes.append(
+                (2 * key + byte + random) % 256
+            )
+        randomized_bytes = bytes(randomized_bytes)
 
-        return ciphertext
+        return randomized_bytes
 
-    def decrypt(self, ciphertext):
+    def decrypt(self, randomized_bytes):
         """
         INPUT
-        ciphertext   [int 0...2N-2]
+        randomized_bytes   bytes [which length is 2N
         OUTPUT
-        plaintext   [int 0...N-1]
+        plainbytes    bytes which length is N
         """
-        len_ciphertext = len(ciphertext)
-        if len_ciphertext % 2 != 0:
+        if type(randomized_bytes) is not bytes:
+            raise ValidationError(
+                "Try another randomized_bytes",
+                "randomized_bytes is not bytes type"
+            )
+        len_rb = len(randomized_bytes)
+        if len_rb % 2 != 0:
             raise ValidationError(
                 "Try another ciphertext: an even lengthed",
                 "odd lengthed ciphertext"
             )
-        plaintext = []
-        for i in range(int(len(ciphertext) / 2)):
-            try:
-                key = self.__bbs.next()
-                plaintext.append(
-                    (ciphertext[2 * i] - ciphertext[2 * i + 1] + key) % 256
-                )
-            except TypeError:
-                raise DiscoveryError(
-                    "Try another plaintext that is an array like of integer",
-                    "input is not an array of integer"
-                )
+        plainbytes = bytearray()
+        for i in range(int(len(randomized_bytes) / 2)):
+            key = self.__bbs.next()
+            plainbytes.append(
+                (randomized_bytes[2 * i] - randomized_bytes[2 * i + 1] + key) % 256
+            )
 
-        return plaintext
+        plainbytes = bytes(plainbytes)
+
+        return plainbytes

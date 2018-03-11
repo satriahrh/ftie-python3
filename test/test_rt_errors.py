@@ -32,8 +32,8 @@ class TestRTEncryptDecrypt(unittest.TestCase):
         try:
             bbs = BBS(_p=7, _q=11, seed=8)
             rt = RT(bbs)
-            rt.encrypt([1, 2, 3, 4, 5, 6, ])
-            rt.decrypt([1, 2, 3, 4, 5, 6, ])
+            rt.encrypt(bytes(6))
+            rt.decrypt(bytes(6))
             self.assert_(True)
         except DiscoveryError as err:
             actual = err.errors
@@ -41,14 +41,14 @@ class TestRTEncryptDecrypt(unittest.TestCase):
             self.assertEqual(expected, actual)
 
     def test_encrypt_not_int(self):
-        with self.assertRaises(DiscoveryError) as err:
+        with self.assertRaises(ValidationError) as err:
             bbs = BBS(_p=7, _q=11, seed=8)
             rt = RT(bbs)
             rt.encrypt(['1', '2'])
 
         self.assertEqual(
             err.exception.errors,
-            "input is not an array of integer"
+            "plainbytes is not bytes type"
         )
 
     def test_decrypt_not_int(self):
@@ -57,16 +57,16 @@ class TestRTEncryptDecrypt(unittest.TestCase):
             rt = RT(bbs)
             rt.decrypt(['1', '2'])
             self.fail('Validation is succeed and no errors')
-        except DiscoveryError as err:
+        except ValidationError as err:
             actual = err.errors
-            expected = "input is not an array of integer"
+            expected = "randomized_bytes is not bytes type"
             self.assertEqual(expected, actual)
 
     def test_decrypt_odd(self):
         try:
             bbs = BBS(_p=7, _q=11, seed=8)
             rt = RT(bbs)
-            rt.decrypt([1, ])
+            rt.decrypt(bytes(1))
             self.fail('Validation is succeed and no errors')
         except ValidationError as err:
             actual = err.errors
