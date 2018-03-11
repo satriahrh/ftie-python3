@@ -43,6 +43,15 @@ def compile_pixels_to_matrix(pixels):
     return matrix
 
 
+def decompile_matrix_to_pixels(matrix):
+    pixels = []
+    for row in matrix:
+        for element in row:
+            pixels.append(element)
+
+    return pixels
+
+
 def numbers_to_pixels(numbers):
     numbers = pad_numbers(numbers)
 
