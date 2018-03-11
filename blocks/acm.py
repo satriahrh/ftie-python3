@@ -1,4 +1,4 @@
-from suplementary.number_theory import fibonacy
+from suplementary.number_theory import fibonacy, fibonacy_a
 from errors import ValidationError, DiscoveryError
 
 
@@ -20,13 +20,8 @@ class ACM:
                 "number_of_iteration is too small"
             )
 
-        self.__a_matrix = [
-            [1, _a],
-            [_b, 1 + _a * _b],
-        ]
-        import numpy as np
-        self.__a_inverse_matrix \
-            = np.linalg.inv(self.__a_matrix).astype(int).tolist()
+        self.__a = _a
+        self.__b = _b
         self.__number_of_iteration = number_of_iteration
         self.__map = {}
 
@@ -52,6 +47,8 @@ class ACM:
 
             if self.__type == 0:
                 ret = self.__mapping_zero(maps_dimension)
+            elif self.__type == 1:
+                ret = self.__mapping_one(maps_dimension)
 
             self.__map[maps_dimension] = ret
             return ret
@@ -67,6 +64,34 @@ class ACM:
                     (
                         fibonacy(2 * self.__number_of_iteration) * x
                         + fibonacy(2 * self.__number_of_iteration + 1) * y
+                    ) % maps_dimension
+                ]
+                for y in range(maps_dimension)
+            ] for x in range(maps_dimension)
+        ]
+
+        return mapping
+
+    # TODO create unittest
+    def __mapping_one(self, maps_dimension):
+        mapping = [
+            [
+                [
+                    (
+                        fibonacy_a(
+                            self.__a, 2 * self.__number_of_iteration - 1
+                        ) * x
+                        + fibonacy_a(
+                            self.__a, 2 * self.__number_of_iteration
+                        ) * y
+                    ) % maps_dimension,
+                    (
+                        fibonacy_a(
+                            self.__a, 2 * self.__number_of_iteration
+                        ) * x
+                        + fibonacy_a(
+                            self.__a, 2 * self.__number_of_iteration + 1
+                        ) * y
                     ) % maps_dimension
                 ]
                 for y in range(maps_dimension)
