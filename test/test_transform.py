@@ -14,7 +14,7 @@ class TestPadStripBytesFunctioning(unittest.TestCase):
             self.bts_padded_expected, self.bts_padded_actual
         )
 
-    def test_pad_bytes_functioning(self):
+    def test_strip_bytes_functioning(self):
         self.assertEqual(
             self.bts, self.bts_padded_stripped
         )
