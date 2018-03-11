@@ -1,5 +1,4 @@
 from blocks import acm, bbs, rt, transform
-import os
 
 
 class Application:
@@ -27,26 +26,21 @@ class Application:
             cipherimage_filepath = plainfile_filepath + ".bmp"
 
         # TRANSFORMATION
-        list_of_byte = transform.file_to_bytes(plainfile_filepath)
-        print(len(list_of_byte))
+        bts = transform.file_to_bytes(plainfile_filepath)
+        plainbytes = transform.pad_bytes(bts)
 
         # RANDOMIZE TEXT
-        randomized_byte = self.__rt.encrypt(list_of_byte)
-        print(len(randomized_byte))
+        randomized_bytes = self.__rt.encrypt(plainbytes)
 
         # TRANSFORMATION
-        list_of_pixel = transform.numbers_to_pixels(randomized_byte)
-        print(len(list_of_pixel))
-        matrix_of_pixel = transform.pixels_to_matrix(list_of_pixel)
-        print(len(matrix_of_pixel))
+        pixels = transform.compile_bytes_to_pixels(randomized_bytes)
+        pixel_matrix = transform.compile_pixels_to_matrix(pixels)
 
         # ARNOLD'S CAT MAP
-        chaotic_matrix = self.__acm.encrypt(matrix_of_pixel)
-        print(len(chaotic_matrix))
+        ciphermatrix = self.__acm.encrypt(pixel_matrix)
 
         # TRANSFORMATION
-        cipherimage = transform.matrix_to_image(chaotic_matrix)
-        print(cipherimage.size)
+        cipherimage = transform.matrix_to_image(ciphermatrix)
 
         # CIPHERIMAGE SAVING
         cipherimage.save(cipherimage_filepath)
@@ -55,23 +49,20 @@ class Application:
         from PIL import Image
 
         cipherimage = Image.open(cipherimage_filepath, mode='r')
-        print(cipherimage.size)
 
         # TRANSFORMATION
-        chaotic_matrix = transform.image_to_matrix(cipherimage)
-        print(len(chaotic_matrix))
+        ciphermatrix = transform.image_to_matrix(cipherimage)
 
         # ARNOLD'S CAT MAP
-        matrix_of_pixel = self.__acm.decrypt(chaotic_matrix)
-        print(len(matrix_of_pixel))
+        pixel_matrix = self.__acm.decrypt(ciphermatrix)
 
         # TRANSFORMATION
-        list_of_pixel = transform.matrix_to_pixels(matrix_of_pixel)
-        print(len(list_of_pixel))
-        randomized_byte = transform.pixels_to_numbers(list_of_pixel)
+        pixels = transform.decompile_matrix_to_pixels(pixel_matrix)
+        randomized_bytes = transform.decompile_pixels_to_bytes(pixels)
 
         # DERANDOMIZED TEXT
-        list_of_byte = self.__rt.decrypt(randomized_byte[:-1])
+        plainbytes = self.__rt.decrypt(randomized_bytes)
 
         # TRANSFORMATION
-        transform.numbers_to_file(list_of_byte, plainfile_filepath)
+        bts = transform.strip_bytes(plainbytes)
+        transform.bytes_to_file(bts, plainfile_filepath)
