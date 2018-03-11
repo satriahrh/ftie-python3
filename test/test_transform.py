@@ -65,6 +65,17 @@ class TestDecompileMatrixToPixelsFunctioning(unittest.TestCase):
         self.assertEqual(actual, expected)
 
 
+class TestDecompilePixelsToBytesFunctioning(unittest.TestCase):
+    def test_functioning(self):
+        pixels = [
+            (48, 49, 50), (51, 52, 53), (54, 55, 56), (57, 65, 66)
+        ]
+
+        expected = b'0123456789AB'
+        actual = t.decompile_pixels_to_bytes(pixels)
+        self.assertEqual(actual, expected)
+
+
 class TestPadNumbersFunctioning(unittest.TestCase):
     def setUp(self):
         self.numbers = [

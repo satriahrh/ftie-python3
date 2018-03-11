@@ -52,6 +52,16 @@ def decompile_matrix_to_pixels(matrix):
     return pixels
 
 
+def decompile_pixels_to_bytes(pixels):
+    bts = bytearray()
+    for pixel in pixels:
+        for number in pixel:
+            bts.append(number)
+
+    bts = bytes(bts)
+    return bts
+
+
 def numbers_to_pixels(numbers):
     numbers = pad_numbers(numbers)
 
