@@ -30,6 +30,9 @@ For you who willing to know more about my research, I have already done the rese
 Not an Indonesian, just drop a request and I will work on it :D.
 The research proposal then available by contacting me (DM, tweet, mention or anything) via Twitter: [@SatriaHRHarsono](https://twitter.com/SatriaHRHarsono).
 
+## System Block Diagram
+![System Block Diagram](docs/assets/system-block-diagram.png)
+
 ## Requirements
 - `python==3.6.4`
 - `nose==1.3.7`
