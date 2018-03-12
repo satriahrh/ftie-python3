@@ -72,7 +72,6 @@ class ACM:
 
         return mapping
 
-    # TODO create unittest
     def __mapping_one(self, maps_dimension):
         mapping = [
             [
