@@ -31,6 +31,11 @@ class ACM:
             self.__type = 1
         else:
             self.__type = 2
+            import numpy as np
+            self.__A_n = np.array([
+                [1, _a],
+                [_b, 1 + _a * _b]
+            ]) ** number_of_iteration
 
     # TODO to private function
     def get_map(self, maps_dimension):
@@ -49,6 +54,8 @@ class ACM:
                 ret = self.__mapping_zero(maps_dimension)
             elif self.__type == 1:
                 ret = self.__mapping_one(maps_dimension)
+            elif self.__type == 2:
+                ret = self.__mapping_two(maps_dimension)
 
             self.__map[maps_dimension] = ret
             return ret
@@ -72,7 +79,6 @@ class ACM:
 
         return mapping
 
-    # TODO create unittest
     def __mapping_one(self, maps_dimension):
         mapping = [
             [
@@ -92,6 +98,32 @@ class ACM:
                         + fibonacy_a(
                             self.__a, 2 * self.__number_of_iteration + 1
                         ) * y
+                    ) % maps_dimension
+                ]
+                for y in range(maps_dimension)
+            ] for x in range(maps_dimension)
+        ]
+
+        return mapping
+
+    def __mapping_two(self, maps_dimension):
+        A_n = [
+            [
+                self.__A_n[0][0] % maps_dimension,
+                self.__A_n[0][1] % maps_dimension
+            ], [
+                self.__A_n[1][0] % maps_dimension,
+                self.__A_n[1][1] % maps_dimension
+            ]
+        ]
+        mapping = [
+            [
+                [
+                    (
+                        A_n[0][0] * x + A_n[0][1] * y
+                    ) % maps_dimension,
+                    (
+                        A_n[1][0] * x + A_n[1][1] * y
                     ) % maps_dimension
                 ]
                 for y in range(maps_dimension)
