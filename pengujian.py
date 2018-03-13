@@ -4,13 +4,6 @@ from time import time
 
 def pengujian_encrypt(p, q, s, a, b, n, mb):
     print('==========================')
-    print(f'p\t\t: {p}')
-    print(f'q\t\t: {q}')
-    print(f's\t\t: {s}')
-    print(f'a\t\t: {a}')
-    print(f'b\t\t: {b}')
-    print(f'n\t\t: {n}')
-    print(f'file\t\t: {mb}MB')
     fstream = open('pengujian', 'wb')
     fstream.write(bytes(1000000 * mb))
     fstream.close()
@@ -20,6 +13,13 @@ def pengujian_encrypt(p, q, s, a, b, n, mb):
         interval=1
     )
     time_consumed = time() - start
+    print(f'p\t\t: {p}')
+    print(f'q\t\t: {q}')
+    print(f's\t\t: {s}')
+    print(f'a\t\t: {a}')
+    print(f'b\t\t: {b}')
+    print(f'n\t\t: {n}')
+    print(f'file\t\t: {mb}MB')
     print(f'time_consumed\t: {time_consumed}s')
     print(f'memory usage\t: {memory}')
 
