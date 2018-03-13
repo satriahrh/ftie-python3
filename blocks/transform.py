@@ -11,7 +11,7 @@ def file_to_bytes(filepath):
 def compile_bytes_to_pixels(bts):
     pixels = []
 
-    for i in range(int(len(bts) / 3)):
+    for i in range(len(bts) // 3):
         pixels.append((
             bts[3 * i],
             bts[3 * i + 1],
@@ -24,15 +24,7 @@ def compile_bytes_to_pixels(bts):
 def compile_pixels_to_matrix(pixels):
     from math import sqrt
 
-    n_matrix = sqrt(len(pixels))
-    # TODO create unittest for this raise
-    if n_matrix % 1 != 0:
-        raise ValidationError(
-            "Try another pixels",
-            "len(pixels) is not a quadratic number"
-        )
-
-    n_matrix = int(n_matrix)
+    n_matrix = int(sqrt(len(pixels)))
 
     matrix = [
         [
@@ -105,17 +97,20 @@ def pad_bytes(bts):
 
     len_bts = len(bts)
     len_rdt = len_bts * 2
+    len_pixels = ceil(len_rdt / 3)
 
-    n_matrix = ceil(sqrt(len_rdt / 3))
+    # ESTIMASI N matrix
+    # ceil untuk mendapatkan jumlah yang diinginkan
+    # kita mencari N genap, agar bisa dibagi 2 untuk RDT
+    n_matrix = ceil(sqrt(len_pixels))
     if n_matrix % 2 == 1:
         n_matrix += 1
 
-    amount_of_padding = ceil(
-        (
-            (n_matrix ** 2) * 3
-            - len_rdt
-        ) / 2
-    )
+    exp_len_pixels = n_matrix ** 2
+    exp_len_rdt = exp_len_pixels * 3
+    exp_len_bts = exp_len_rdt // 2
+
+    amount_of_padding = exp_len_bts - len_bts
 
     bts += bytes(amount_of_padding)
 
