@@ -2,9 +2,11 @@ astroid==1.6.1
 isort==4.3.3
 lazy-object-proxy==1.3.1
 mccabe==0.6.1
+memory-profiler==0.52.0
 nose==1.3.7
 numpy==1.14.0
 Pillow==5.0.0
+psutil==5.4.3
 pylint==1.8.2
 six==1.11.0
 wrapt==1.10.11
