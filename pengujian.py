@@ -17,7 +17,7 @@ def pengujian_encrypt(p, q, s, a, b, n, mb):
     start = time()
     memory = memory_usage(
         (encrypt, (p, q, s, a, b, n)),
-        interval=0.2
+        interval=1
     )
     time_consumed = time() - start
     print(f'time_consumed\t: {time_consumed}s')
