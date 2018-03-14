@@ -38,10 +38,38 @@ def decrypt(p, q, s, a, b, n, mb):
 
 
 if __name__ == '__main__':
-    print('PENGUJIAN ACM DISCRETE')
+    print('PENGUJIAN ACM DISCRETE ==========================')
+    print('ENKRIPSI ========================================')
     for i in range(1, 21):
-        pengujian_encrypt(11, 7, 9, 1, 1, 1, i)
+        pengujian(11, 7, 9, 1, 1, 100, i, encrypt)
 
-    print('PENGUJIAN ACM GENERAL EQUAL')
+    print()
+
+    print('DEKRIPSI ========================================')
     for i in range(1, 21):
-        pengujian_encrypt(11, 7, 9, 2, 2, 1, i)
+        pengujian(11, 7, 9, 1, 1, 100, i, decrypt)
+
+    print()
+    print()
+
+    print('PENGUJIAN ACM GENERAL a = b =====================')
+    print('ENKRIPSI ========================================')
+    for i in range(1, 21):
+        pengujian(11, 7, 9, 2, 2, 100, i, encrypt)
+
+    print()
+
+    print('DEKRIPSI ========================================')
+    for i in range(1, 21):
+        pengujian(11, 7, 9, 2, 2, 100, i, decrypt)
+
+    print('PENGUJIAN ACM GENERAL any a and b ===============')
+    print('ENKRIPSI ========================================')
+    for i in range(1, 21):
+        pengujian(11, 7, 9, 3, 4, 100, i, encrypt)
+
+    print()
+
+    print('DEKRIPSI ========================================')
+    for i in range(1, 21):
+        pengujian(11, 7, 9, 3, 4, 100, i, decrypt)
