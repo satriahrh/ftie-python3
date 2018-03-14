@@ -2,14 +2,15 @@ from app import Application
 from memory_profiler import memory_usage
 from time import time
 
-def pengujian_encrypt(p, q, s, a, b, n, mb):
+
+def pengujian(p, q, s, a, b, n, mb, fungsi):
     print('==========================')
-    fstream = open('pengujian', 'wb')
-    fstream.write(bytes(1000000 * mb))
+    fstream = open('pengujian'+str(mb), 'wb')
+    fstream.write(b'1' * mb)
     fstream.close()
     start = time()
     memory = memory_usage(
-        (encrypt, (p, q, s, a, b, n)),
+        (fungsi, (p, q, s, a, b, n, mb)),
         interval=1
     )
     time_consumed = time() - start
@@ -24,8 +25,16 @@ def pengujian_encrypt(p, q, s, a, b, n, mb):
     print(f'memory usage\t: {memory}')
 
 
-def encrypt(p, q, s, a, b, n):
-    Application(p, q, s, a, b, n).encrypt('pengujian', 'pengujian')
+def encrypt(p, q, s, a, b, n, mb):
+    plainfile_fp = 'pengujian'+str(mb)
+    cipherimage_fp = 'pengujian'+str(mb)
+    Application(p, q, s, a, b, n).encrypt(plainfile_fp, cipherimage_fp)
+
+
+def decrypt(p, q, s, a, b, n, mb):
+    cipherimage_fp = 'pengujian'+str(mb)+'.bmp'
+    plainfile_fp = 'pengujian'+str(mb)
+    Application(p, q, s, a, b, n).decrypt(cipherimage_fp, plainfile_fp)
 
 
 if __name__ == '__main__':
