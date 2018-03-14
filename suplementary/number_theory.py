@@ -40,3 +40,37 @@ def modular_pow(base, exponent, modulus):
         ret = (ret * base) % modulus
 
     return ret
+
+
+matrix_mul = lambda A, B: [
+        [
+            sum([A[i][k] * B[k][j] for k in range(B)])
+            for j in range(B[0])
+        ]
+        for i in range(A)
+    ]
+
+
+
+__identity = lambda x, y: 1 if x == y else 0
+def matrix_modular_pow(base_matrix, exponent, modulus):
+    if exponent == 0:
+        return [
+            [__identity(x, y) for y in range(base_matrix[0])]
+            for x in range(base_matrix)
+        ]
+
+    if exponent % 2 == 1:
+        return (
+            matrix_mul(
+                base_matrix,
+                matrix_modular_pow(
+                    base_matrix,
+                    exponent - 1,
+                    modulus
+                )
+            )
+        ) % modulus
+
+    matrix_even = matrix_modular_pow(base_matrix, exponent / 2, modulus)
+    return matrix_mul(matrix_even, matrix_even) % modulus
