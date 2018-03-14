@@ -28,3 +28,15 @@ def fibonacy_a(_a, _n):
         for i in range(2, _n + 1):
             FIBONACY_A[i] = _a * fibonacy_a(_a, i - 1) + fibonacy_a(_a, i - 2)
         return FIBONACY_A[_n]
+
+
+# TODO Unittest for this function using mathematical induction
+def modular_pow(base, exponent, modulus):
+    if modulus == 1:
+        return 0
+
+    ret = 1
+    for i in range(exponent):
+        ret = (ret * base) % modulus
+
+    return ret
