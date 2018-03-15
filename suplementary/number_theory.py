@@ -42,6 +42,7 @@ def modular_pow(base, exponent, modulus):
     return ret
 
 
+# TODO Unittest for this function using mathematical induction
 matrix_mul = lambda A, B: [
         [
             sum([A[i][k] * B[k][j] for k in range(B)])
@@ -51,7 +52,7 @@ matrix_mul = lambda A, B: [
     ]
 
 
-
+# TODO Unittest for this function using mathematical induction
 __identity = lambda x, y: 1 if x == y else 0
 def matrix_modular_pow(base_matrix, exponent, modulus):
     if exponent == 0:
