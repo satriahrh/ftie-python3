@@ -1,4 +1,4 @@
-from suplementary.number_theory import fibonacy, fibonacy_a
+from suplementary import number_theory as nt
 from errors import ValidationError, DiscoveryError
 
 
@@ -65,12 +65,12 @@ class ACM:
             [
                 [
                     (
-                        fibonacy(2 * self.__number_of_iteration - 1) * x
-                        + fibonacy(2 * self.__number_of_iteration) * y
+                        nt.fibonacy(2 * self.__number_of_iteration - 1) * x
+                        + nt.fibonacy(2 * self.__number_of_iteration) * y
                     ) % maps_dimension,
                     (
-                        fibonacy(2 * self.__number_of_iteration) * x
-                        + fibonacy(2 * self.__number_of_iteration + 1) * y
+                        nt.fibonacy(2 * self.__number_of_iteration) * x
+                        + nt.fibonacy(2 * self.__number_of_iteration + 1) * y
                     ) % maps_dimension
                 ]
                 for y in range(maps_dimension)
@@ -84,18 +84,18 @@ class ACM:
             [
                 [
                     (
-                        fibonacy_a(
+                        nt.fibonacy_a(
                             self.__a, 2 * self.__number_of_iteration - 1
                         ) * x
-                        + fibonacy_a(
+                        + nt.fibonacy_a(
                             self.__a, 2 * self.__number_of_iteration
                         ) * y
                     ) % maps_dimension,
                     (
-                        fibonacy_a(
+                        nt.fibonacy_a(
                             self.__a, 2 * self.__number_of_iteration
                         ) * x
-                        + fibonacy_a(
+                        + nt.fibonacy_a(
                             self.__a, 2 * self.__number_of_iteration + 1
                         ) * y
                     ) % maps_dimension
