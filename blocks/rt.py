@@ -1,5 +1,6 @@
 from blocks.bbs import BBS
 from errors import ValidationError, DiscoveryError
+from suplementary import number_theory as nt
 
 
 class RT:
@@ -33,10 +34,34 @@ class RT:
             random = randint(0, 256)
             key = self.__bbs.next()
             randomized_bytes.append(
-                (key + 2 * byte + random) % 256
+                nt.mod_add(
+                    nt.mod_add(
+                        key,
+                        nt.mod_mul(
+                            2,
+                            byte,
+                            256
+                        ),
+                        256
+                    ),
+                    random,
+                    256
+                )
             )
             randomized_bytes.append(
-                (2 * key + byte + random) % 256
+                nt.mod_add(
+                    nt.mod_add(
+                        nt.mod_mul(
+                            2,
+                            key,
+                            256
+                        ),
+                        byte,
+                        256
+                    ),
+                    random,
+                    256
+                )
             )
         randomized_bytes = bytes(randomized_bytes)
 
@@ -63,8 +88,21 @@ class RT:
         plainbytes = bytearray()
         for i in range(int(len(randomized_bytes) / 2)):
             key = self.__bbs.next()
+            # TODO investigate wether we need use modular operation on each unit
             plainbytes.append(
-                (randomized_bytes[2 * i] - randomized_bytes[2 * i + 1] + key) % 256
+                nt.mod_add(
+                    nt.mod_add(
+                        randomized_bytes[2 * i],
+                        nt.mod_mul(
+                            -1,
+                            randomized_bytes[2 * i + 1],
+                            256
+                        ),
+                        256
+                    ),
+                    key,
+                    256
+                )
             )
 
         plainbytes = bytes(plainbytes)

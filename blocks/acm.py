@@ -32,10 +32,10 @@ class ACM:
         else:
             self.__type = 2
             import numpy as np
-            self.__A_n = np.array([
+            self.__A = [
                 [1, _a],
                 [_b, 1 + _a * _b]
-            ]) ** number_of_iteration
+            ]
 
     # TODO to private function
     def get_map(self, maps_dimension):
@@ -107,24 +107,24 @@ class ACM:
         return mapping
 
     def __mapping_two(self, maps_dimension):
-        A_n = [
-            [
-                self.__A_n[0][0] % maps_dimension,
-                self.__A_n[0][1] % maps_dimension
-            ], [
-                self.__A_n[1][0] % maps_dimension,
-                self.__A_n[1][1] % maps_dimension
-            ]
-        ]
+        A_n = nt.mod_matrix_pow(
+            self.__A,
+            self.__number_of_iteration,
+            maps_dimension
+        )
+
         mapping = [
             [
                 [
-                    (
-                        A_n[0][0] * x + A_n[0][1] * y
-                    ) % maps_dimension,
-                    (
-                        A_n[1][0] * x + A_n[1][1] * y
-                    ) % maps_dimension
+                    nt.mod_add(
+                        nt.mod_mul(A_n[0][0], x, maps_dimension),
+                        nt.mod_mul(A_n[0][1], y, maps_dimension),
+                        maps_dimension
+                    ), nt.mod_add(
+                        nt.mod_mul(A_n[1][0], x, maps_dimension),
+                        nt.mod_mul(A_n[1][1], y, maps_dimension),
+                        maps_dimension
+                    )
                 ]
                 for y in range(maps_dimension)
             ] for x in range(maps_dimension)
