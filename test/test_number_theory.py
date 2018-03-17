@@ -18,3 +18,70 @@ class TestIsPrime(unittest.TestCase):
     def test_p_is_root(self):
         actual = nt.is_prime(_p=9)
         self.assertFalse(actual)
+
+
+class TestMod(unittest.TestCase):
+    def test_mod_add(self):
+        expected = [0, 1, 0, 1]
+        for i in range(4):
+            with self.subTest(i=i):
+                actual = nt.mod_add(0, i, 2)
+                self.assertEqual(expected[i], actual)
+
+    def test_mod_mul(self):
+        expected = [0, 1, 2, 0, 1]
+        for i in range(5):
+            with self.subTest(i=i):
+                actual = nt.mod_mul(1, i, 3)
+                self.assertEqual(expected[i], actual)
+
+    def test_mod_pow(self):
+        expected = [1, 2, 4, ] + [0, ] * 7
+        for i in range(10):
+            with self.subTest(i=i):
+                actual = nt.mod_pow(2, i, 8)
+                self.assertEqual(expected[i], actual)
+
+    def test_mod_matrix_mul(self):
+        A = [
+            [1, 3],
+            [3, 4]
+        ]
+
+        B = [
+            [5, 0],
+            [1, 2]
+        ]
+
+        expected = [
+            [2, 0],
+            [1, 2]
+        ]
+
+        actual = nt.mod_matrix_mul(A, B, 6)
+
+        self.assertEqual(expected, actual)
+
+    def test_mod_matrix_pow(self):
+        base_matrix = [
+            [1, 2],
+            [3, 4]
+        ]
+
+        expected = [
+            [
+                [1, 0],
+                [0, 1]
+            ], [
+                [1, 2],
+                [3, 4]
+            ], [
+                [2, 0],
+                [0, 2]
+            ],
+        ]
+
+        for i in range(3):
+            with self.subTest(i=i):
+                actual = nt.mod_matrix_pow(base_matrix, i, 5
+                self.assertEqual(expected[i], actual)
