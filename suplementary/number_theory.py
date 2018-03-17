@@ -1,3 +1,4 @@
+from functools import reduce
 import math
 
 def is_prime(_p):
@@ -30,48 +31,94 @@ def fibonacy_a(_a, _n):
         return FIBONACY_A[_n]
 
 
-# TODO Unittest for this function using mathematical induction
-def modular_pow(base, exponent, modulus):
-    if modulus == 1:
-        return 0
-
-    ret = 1
-    for i in range(exponent):
-        ret = (ret * base) % modulus
-
-    return ret
+mod_add = \
+    lambda a, b, modulus: (a + b) % modulus
 
 
-# TODO Unittest for this function using mathematical induction
-matrix_mul = lambda A, B: [
-        [
-            sum([A[i][k] * B[k][j] for k in range(B)])
-            for j in range(B[0])
-        ]
-        for i in range(A)
+mod_mul = \
+    lambda a, b, modulus: reduce(
+        (lambda p, q: mod_add(p, q, modulus)),
+        [0, ] + [a for x in range(b)]
+    )
+
+
+mod_pow = \
+    lambda base, exponent, modulus: \
+    reduce(
+        (lambda p, q: mod_mul(p, q, modulus)),
+        [1, ] + [base for x in range(exponent)]
+    )
+
+
+mod_matrix_mul = lambda A, B, modulus: [
+    [
+        reduce(
+            lambda p, q: mod_add(p, q, modulus),
+            [mod_mul(A[i][k], B[k][j], modulus) for k in range(len(B))]
+        )
+        for j in range(len(B[0]))
+    ]
+    for i in range(len(A))
+]
+
+
+__identity = lambda x, y: 1 if x == y else 0
+matrix_identity = lambda N: \
+    [
+        [__identity(x, y) for y in range(N)]
+        for x in range(N)
     ]
 
 
-# TODO Unittest for this function using mathematical induction
-__identity = lambda x, y: 1 if x == y else 0
-def matrix_modular_pow(base_matrix, exponent, modulus):
+# TODO refactor mod_matrix_pow to functional function
+def mod_matrix_pow(base_matrix, exponent, modulus):
     if exponent == 0:
-        return [
-            [__identity(x, y) for y in range(base_matrix[0])]
-            for x in range(base_matrix)
-        ]
-
+        return matrix_identity(
+            len(base_matrix)
+        )
     if exponent % 2 == 1:
-        return (
-            matrix_mul(
+        return mod_matrix_mul(
+            base_matrix,
+            mod_matrix_pow(
                 base_matrix,
-                matrix_modular_pow(
-                    base_matrix,
-                    exponent - 1,
-                    modulus
-                )
-            )
-        ) % modulus
-
-    matrix_even = matrix_modular_pow(base_matrix, exponent / 2, modulus)
-    return matrix_mul(matrix_even, matrix_even) % modulus
+                exponent - 1,
+                modulus
+            ), modulus
+        )
+    d_matrix = mod_matrix_pow(
+        base_matrix,
+        exponent // 2,
+        modulus
+    )
+    return mod_matrix_mul(
+        d_matrix,
+        d_matrix,
+        modulus
+    )
+# mod_matrix_pow = \
+#     lambda base_matrix, exponent, modulus: \
+#     matrix_identity(
+#         len(base_matrix)
+#     ) if exponent == 0 else \
+#     mod_matrix_mul(
+#         base_matrix,
+#         mod_matrix_pow(
+#             base_matrix,
+#             exponent - 1,
+#             modulus
+#         ),
+#         modulus
+#     ) if exponent % 2 == 1 else \
+#     mod_matrix_mul(
+#         mod_matrix_pow(
+#             base_matrix,
+#             exponent // 2,
+#             modulus
+#         ),
+#         mod_matrix_pow(
+#             base_matrix,
+#             exponent // 2,
+#             modulus
+#         ),
+#         modulus
+#     )
