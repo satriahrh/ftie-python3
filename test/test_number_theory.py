@@ -83,5 +83,5 @@ class TestMod(unittest.TestCase):
 
         for i in range(3):
             with self.subTest(i=i):
-                actual = nt.mod_matrix_pow(base_matrix, i, 5
+                actual = nt.mod_matrix_pow(base_matrix, i, 5)
                 self.assertEqual(expected[i], actual)
