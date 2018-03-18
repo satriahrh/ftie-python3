@@ -82,6 +82,18 @@ class TestAcmGeneralDifferent(unittest.TestCase):
             ] for x in range(message_dimension)
         ]
 
+    def test_type_one_period(self):
+        acm = ACM(_a=2, _b=3, number_of_iteration=4)
+        actual = acm.get_map(8)  # 4 is the period of this form
+        expected = self.create_simple_map(8)
+        self.assertEqual(expected, actual)
+
+    def test_type_one_not_period(self):
+        acm = ACM(_a=2, _b=3, number_of_iteration=3)
+        actual = acm.get_map(8)  # 3 is not the period of this form
+        expected = self.create_simple_map(8)
+        self.assertNotEqual(expected, actual)
+
     def test_encrypt_decrypt(self):
         acm = ACM(_a=1, _b=2, number_of_iteration=1)
         ciphertext = acm.encrypt(self.create_simple_message(5))
