@@ -6,7 +6,7 @@ from time import time
 def pengujian(p, q, s, a, b, n, mb, fungsi):
     print('==========================')
     fstream = open('pengujian'+str(mb), 'wb')
-    fstream.write(b'1' * mb)
+    fstream.write(b'1' * mb * 1000000)
     fstream.close()
     start = time()
     memory = memory_usage(
