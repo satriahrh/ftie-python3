@@ -1,5 +1,59 @@
 from suplementary import number_theory as nt
 from errors import ValidationError, DiscoveryError
+import multiprocessing as mp
+
+
+def run(function, size, remaining, start=0):
+    def process_run(function, bottom, top, output):
+        output.put((bottom, function(bottom, top)))
+
+    output = mp.Queue()
+
+    processed = remaining // size
+
+    processes = [
+        mp.Process(
+            target=process_run,
+            args=(
+                function,
+                start + rank * processed,
+                start + rank * processed + processed,
+                output
+            )
+        ) for rank in range(size)
+    ]
+
+    for process in processes:
+        process.start()
+
+    next_remaining = remaining - processed * size
+
+    recurrance = []
+
+    if next_remaining > 0:
+        recurrance = run(
+            function=function,
+            size=next_remaining,
+            remaining=next_remaining,
+            start=processed * size
+        )
+
+    buf = output.get()
+    key = [buf[0]]
+    data = [buf[1]]
+    for x in range(len(processes) - 1):
+        buf = output.get()
+        y = 0
+        while y < len(key) and key[y] < buf[0]:
+            y += 1
+
+        key.insert(y, buf[0])
+        data.insert(y, buf[1])
+
+    dt = []
+    for d in data:
+        dt += d
+    return dt + recurrance
 
 
 class ACM:
@@ -31,7 +85,6 @@ class ACM:
             self.__type = 1
         else:
             self.__type = 2
-            import numpy as np
             self.__A = [
                 [1, _a],
                 [_b, 1 + _a * _b]
@@ -39,6 +92,66 @@ class ACM:
 
     # TODO to private function
     def get_map(self, maps_dimension):
+        def discrete(bottom, top):
+            return [
+                [
+                    [
+                        (
+                            nt.fibonacy(2 * self.__number_of_iteration - 1) * x
+                            + nt.fibonacy(2 * self.__number_of_iteration) * y
+                        ) % maps_dimension,
+                        (
+                            nt.fibonacy(2 * self.__number_of_iteration) * x
+                            + nt.fibonacy(2 * self.__number_of_iteration + 1) * y
+                        ) % maps_dimension
+                    ]
+                    for y in range(maps_dimension)
+                ] for x in range(bottom, top)
+            ]
+
+        def general_equal(bottom, top):
+            return [
+                [
+                    [
+                        (
+                            nt.fibonacy_a(
+                                self.__a, 2 * self.__number_of_iteration - 1
+                            ) * x
+                            + nt.fibonacy_a(
+                                self.__a, 2 * self.__number_of_iteration
+                            ) * y
+                        ) % maps_dimension,
+                        (
+                            nt.fibonacy_a(
+                                self.__a, 2 * self.__number_of_iteration
+                            ) * x
+                            + nt.fibonacy_a(
+                                self.__a, 2 * self.__number_of_iteration + 1
+                            ) * y
+                        ) % maps_dimension
+                    ]
+                    for y in range(maps_dimension)
+                ] for x in range(bottom, top)
+            ]
+
+        def general_any(bottom, top):
+            return [
+                [
+                    [
+                        nt.mod_add(
+                            nt.mod_mul(A_n[0][0], x, maps_dimension),
+                            nt.mod_mul(A_n[0][1], y, maps_dimension),
+                            maps_dimension
+                        ), nt.mod_add(
+                            nt.mod_mul(A_n[1][0], x, maps_dimension),
+                            nt.mod_mul(A_n[1][1], y, maps_dimension),
+                            maps_dimension
+                        )
+                    ]
+                    for y in range(maps_dimension)
+                ] for x in range(bottom, top)
+            ]
+
         try:
             return self.__map[maps_dimension]
         except KeyError:
@@ -51,86 +164,19 @@ class ACM:
             ret = None
 
             if self.__type == 0:
-                ret = self.__mapping_zero(maps_dimension)
+                ret = run(discrete, mp.cpu_count(), maps_dimension)
             elif self.__type == 1:
-                ret = self.__mapping_one(maps_dimension)
+                ret = run(general_equal, mp.cpu_count(), maps_dimension)
             elif self.__type == 2:
-                ret = self.__mapping_two(maps_dimension)
+                A_n = nt.mod_matrix_pow(
+                    self.__A,
+                    self.__number_of_iteration,
+                    maps_dimension
+                )
+                ret = run(general_any, mp.cpu_count(), maps_dimension)
 
             self.__map[maps_dimension] = ret
             return ret
-
-    def __mapping_zero(self, maps_dimension):
-        mapping = [
-            [
-                [
-                    (
-                        nt.fibonacy(2 * self.__number_of_iteration - 1) * x
-                        + nt.fibonacy(2 * self.__number_of_iteration) * y
-                    ) % maps_dimension,
-                    (
-                        nt.fibonacy(2 * self.__number_of_iteration) * x
-                        + nt.fibonacy(2 * self.__number_of_iteration + 1) * y
-                    ) % maps_dimension
-                ]
-                for y in range(maps_dimension)
-            ] for x in range(maps_dimension)
-        ]
-
-        return mapping
-
-    def __mapping_one(self, maps_dimension):
-        mapping = [
-            [
-                [
-                    (
-                        nt.fibonacy_a(
-                            self.__a, 2 * self.__number_of_iteration - 1
-                        ) * x
-                        + nt.fibonacy_a(
-                            self.__a, 2 * self.__number_of_iteration
-                        ) * y
-                    ) % maps_dimension,
-                    (
-                        nt.fibonacy_a(
-                            self.__a, 2 * self.__number_of_iteration
-                        ) * x
-                        + nt.fibonacy_a(
-                            self.__a, 2 * self.__number_of_iteration + 1
-                        ) * y
-                    ) % maps_dimension
-                ]
-                for y in range(maps_dimension)
-            ] for x in range(maps_dimension)
-        ]
-
-        return mapping
-
-    def __mapping_two(self, maps_dimension):
-        A_n = nt.mod_matrix_pow(
-            self.__A,
-            self.__number_of_iteration,
-            maps_dimension
-        )
-
-        mapping = [
-            [
-                [
-                    nt.mod_add(
-                        nt.mod_mul(A_n[0][0], x, maps_dimension),
-                        nt.mod_mul(A_n[0][1], y, maps_dimension),
-                        maps_dimension
-                    ), nt.mod_add(
-                        nt.mod_mul(A_n[1][0], x, maps_dimension),
-                        nt.mod_mul(A_n[1][1], y, maps_dimension),
-                        maps_dimension
-                    )
-                ]
-                for y in range(maps_dimension)
-            ] for x in range(maps_dimension)
-        ]
-
-        return mapping
 
     def __check_input_matrix(self, matrix):
         row_count = len(matrix[0])
@@ -186,21 +232,9 @@ class ACM:
             for x in range(maps_dimension)
         ]
 
-        for x, row in enumerate(matrix):
-            len_row = len(row)
-            if len_row != maps_dimension:
-                raise DiscoveryError(
-                    "Try another matrix",
-                    "this is not a consistent matrix"
-                )
-            for y in range(len_row):
-                try:
-                    _map = maps[x][y]
-                    ret[_map[0]][_map[1]] = matrix[x][y]
-                except IndexError:
-                    raise DiscoveryError(
-                        "Try another matrix",
-                        "this is not a consistent matrix"
-                    )
+        for x in range(len(matrix)):
+            for y in range(len(matrix[x])):
+                _map = maps[x][y]
+                ret[_map[0]][_map[1]] = matrix[x][y]
 
         return ret
