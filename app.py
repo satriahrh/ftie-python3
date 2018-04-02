@@ -9,11 +9,8 @@ class Application:
         bbs_p, bbs_q, bbs_seed,
         acm_a, acm_b, acm_n,
     ):
-        # BBS
-        self.__bbs = bbs.BBS(_p=bbs_p, _q=bbs_q, seed=bbs_seed)
-
         # RT
-        self.__rt = rt.RT(self.__bbs)
+        self.__rt = rt.RT(bbs_p=bbs_p, bbs_q=bbs_q, bbs_seed=bbs_seed)
 
         # ACM
         self.__acm = acm.ACM(_a=acm_a, _b=acm_b, number_of_iteration=acm_n)

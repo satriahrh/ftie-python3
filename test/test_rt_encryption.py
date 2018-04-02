@@ -1,13 +1,12 @@
 import unittest
 from blocks.rt import RT
-from blocks.bbs import BBS
 
 
 class TestEncryptionDecryption(unittest.TestCase):
     def setUp(self):
         self.__plainbytes = b'This is the secret message'
-        self.__alice = RT(BBS(_p=7, _q=11, seed=9))
-        self.__bob = RT(BBS(_p=7, _q=11, seed=9))
+        self.__alice = RT(bbs_p=7, bbs_q=11, bbs_seed=9)
+        self.__bob = RT(bbs_p=7, bbs_q=11, bbs_seed=9)
 
     def test_encryption_succeed(self):
         ciphertext = self.__alice.encrypt(self.__plainbytes)
@@ -16,6 +15,7 @@ class TestEncryptionDecryption(unittest.TestCase):
 
     def test_decryption_succeed(self):
         ciphertext = self.__alice.encrypt(self.__plainbytes)
+        print(ciphertext)
         decrypted = self.__bob.decrypt(ciphertext)
         message = "Decryption failed"
         self.assertEqual(self.__plainbytes, decrypted, message)
@@ -24,8 +24,8 @@ class TestEncryptionDecryption(unittest.TestCase):
 class TestAliceAndBob(unittest.TestCase):
     def setUp(self):
         self.__plainbytes = b'This is the secret message'
-        self.__alice = RT(BBS(_p=7, _q=11, seed=9))
-        self.__bob = RT(BBS(_p=7, _q=11, seed=9))
+        self.__alice = RT(bbs_p=7, bbs_q=11, bbs_seed=9)
+        self.__bob = RT(bbs_p=7, bbs_q=11, bbs_seed=9)
 
     def test_alice_and_bob_are_swinging(self):
         # round 1
