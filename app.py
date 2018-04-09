@@ -16,18 +16,9 @@ class Application:
         # ACM
         self.__acm = acm.ACM(_a=acm_a, _b=acm_b, number_of_iteration=acm_n)
 
-    def encrypt(self, plainfile_filepath, cipherimage_filepath=None):
-
-        # PREPARATION
-        if cipherimage_filepath is not None:
-            if cipherimage_filepath[-3:].lower() != "bmp":
-                cipherimage_filepath += ".bmp"
-        else:
-            cipherimage_filepath = plainfile_filepath + ".bmp"
-
+    def encrypt(self, plainfile):
         # TRANSFORMATION
-        bts = transform.file_to_bytes(plainfile_filepath)
-        plainbytes = transform.pad_bytes(bts)
+        plainbytes = transform.pad_bytes(plainfile)
 
         # RANDOMIZE TEXT
         randomized_bytes = self.__rt.encrypt(plainbytes)
@@ -42,14 +33,9 @@ class Application:
         # TRANSFORMATION
         cipherimage = transform.matrix_to_image(ciphermatrix)
 
-        # CIPHERIMAGE SAVING
-        cipherimage.save(cipherimage_filepath)
+        return cipherimage
 
-    def decrypt(self, cipherimage_filepath, plainfile_filepath):
-        from PIL import Image
-
-        cipherimage = Image.open(cipherimage_filepath, mode='r')
-
+    def decrypt(self, cipherimage):
         # TRANSFORMATION
         ciphermatrix = transform.image_to_matrix(cipherimage)
 
@@ -64,5 +50,6 @@ class Application:
         plainbytes = self.__rt.decrypt(randomized_bytes)
 
         # TRANSFORMATION
-        bts = transform.strip_bytes(plainbytes)
-        transform.bytes_to_file(bts, plainfile_filepath)
+        plainfile = transform.strip_bytes(plainbytes)
+
+        return plainfile
