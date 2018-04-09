@@ -5,18 +5,18 @@ from blocks.rt import RT
 from suplementary import image_randomness as ir
 
 
-def plain_and_cipher_image(bts, BBS_P, BBS_Q, BBS_S, ACM_A, ACM_B, ACM_N):
+def plain_and_cipher_image(bts, P, Q, S, A, B, N):
     # PREPARATION
     rt = RT(BBS(
-        _p=BBS_P,
-        _q=BBS_Q,
-        seed=BBS_S
+        _p=P,
+        _q=Q,
+        seed=S
     ))
 
     acm = ACM(
-        _a=ACM_A,
-        _b=ACM_B,
-        number_of_iteration=ACM_N
+        _a=A,
+        _b=B,
+        number_of_iteration=N
     )
 
     # TRANSFORMATION
@@ -37,24 +37,26 @@ def plain_and_cipher_image(bts, BBS_P, BBS_Q, BBS_S, ACM_A, ACM_B, ACM_N):
         transform.matrix_to_image(ciphermatrix)
 
 
-def pengujian(BBS_P, BBS_Q, BBS_S, ACM_A, ACM_B, ACM_N, MB):
+def pengujian(P, Q, S, A, B, N, MB):
+    pengujian_id = f'{MB}_{P}_{Q}_{S}_{A}_{B}_{N}'
+
+    print(f'ID {pengujian_id}')
+
     bts = b'1' * int(MB * 1000000)
 
-    print(f'p\t\t: {BBS_P}')
-    print(f'q\t\t: {BBS_Q}')
-    print(f's\t\t: {BBS_S}')
-    print(f'a\t\t: {ACM_A}')
-    print(f'b\t\t: {ACM_B}')
-    print(f'n\t\t: {ACM_N}')
-    print(f'file\t\t: {MB}MB')
-
     plainimage, cipherimage = \
-        plain_and_cipher_image(bts, BBS_P, BBS_Q, BBS_S, ACM_A, ACM_B, ACM_N)
+        plain_and_cipher_image(bts, P, Q, S, A, B, N)
 
     print(f'NPCR(r, g, b)\t: {ir.npcr(plainimage, cipherimage)}')
     print(f'UACI(r, g, b)\t: {ir.uaci(plainimage, cipherimage)}')
     print()
 
 
-pengujian(BBS_P=99991, BBS_Q=99971, BBS_S=2, ACM_A=1, ACM_B=1, ACM_N=5, MB=1)
-pengujian(BBS_P=11, BBS_Q=7, BBS_S=9, ACM_A=1, ACM_B=1, ACM_N=5, MB=1)
+if __name__ == '__main__':
+    MB = 0.001
+
+    P, Q, S, A, B, N = 11, 7, 9, 1, 1, 5
+    pengujian(P, Q, S, A, B, N, MB)
+
+    P, Q, S, A, B, N = 99991, 99971, 2, 1, 1, 5
+    pengujian(P, Q, S, A, B, N, MB)
