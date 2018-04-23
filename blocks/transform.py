@@ -1,98 +1,35 @@
-def file_to_bytes(filepath):
-    with open(filepath, 'rb') as fstream:
-        byte_array = fstream.read()
-
-    return byte_array
+import numpy as np
+from PIL import Image
 
 
-def compile_bytes_to_pixels(bts):
-    pixels = []
-
-    for i in range(len(bts) // 3):
-        pixels.append((
-            bts[3 * i],
-            bts[3 * i + 1],
-            bts[3 * i + 2],
-        ))
-
-    return pixels
-
-
-def compile_pixels_to_matrix(pixels):
-    from math import sqrt
-
-    n_matrix = int(sqrt(len(pixels)))
-
-    matrix = [
-        [
-            pixels[n_matrix * x + y] for y in range(n_matrix)
-        ]
-        for x in range(n_matrix)
-    ]
+def bytes_to_matrix(bts: bytes):
+    dimension = int((len(bts) // 3) ** 0.5)
+    matrix = np.array(bts, np.dtype('B')).reshape(dimension, dimension, 3)
 
     return matrix
 
 
-def decompile_matrix_to_pixels(matrix):
-    pixels = []
-    for row in matrix:
-        for element in row:
-            pixels.append(element)
-
-    return pixels
+def matrix_to_bytes(matrix: np.ndarray):
+    return matrix.reshape(matrix.size)
 
 
-def decompile_pixels_to_bytes(pixels):
-    bts = bytearray()
-    for pixel in pixels:
-        for number in pixel:
-            bts.append(number)
-
-    bts = bytes(bts)
-    return bts
-
-
-def matrix_to_image(matrix):
-    from PIL import Image
-
-    image = Image.new(
-        size=(len(matrix), len(matrix[0])),
-        mode='RGB',
-        color=(256, 256, 256)
+def matrix_to_image(matrix: np.ndarray):
+    image = Image.fromarray(
+        matrix
     )
-
-    for x in range(len(matrix)):
-        for y in range(len(matrix[0])):
-            image.putpixel(
-                xy=(x, y),
-                value=matrix[x][y]
-            )
 
     return image
 
 
-def image_to_matrix(image):
-    matrix = []
-    for x in range(image.size[0]):
-        matrix.append([])
-        for y in range(image.size[1]):
-            matrix[x].append(image.getpixel((x, y)))
-
-    return matrix
-
-
-def bytes_to_file(bts, file_path):
-    with open(file_path, "wb") as fstream:
-        fstream.write(bts)
-
-    return file_path
+def image_to_matrix(image: Image):
+    return np.array(image)
 
 
 # PADDING
-def pad_bytes(bts):
+def pad_bytes(bts: np.ndarray):
     from math import ceil, sqrt
 
-    len_bts = len(bts)
+    len_bts = bts.size
     len_rdt = len_bts * 2
     len_pixels = ceil(len_rdt / 3)
 
@@ -109,16 +46,16 @@ def pad_bytes(bts):
 
     amount_of_padding = exp_len_bts - len_bts
 
-    bts += bytes(amount_of_padding)
+    padding = np.zeros(amount_of_padding, np.dtype('B'))
 
-    return bts
+    return np.append(bts, padding)
 
 
 # STRIP
-def strip_bytes(bts):
-    to = len(bts)
+def strip_bytes(bts: np.ndarray):
+    to = bts.size
 
     while bts[to - 1] == 0:
         to -= 1
 
-    return bts[:to]
+    return np.delete(bts, np.s_[to:])

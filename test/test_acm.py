@@ -1,19 +1,20 @@
 import unittest
 from blocks.acm import ACM
+from PIL import Image
+
+import numpy as np
 
 
 class TestAcmDiscreete(unittest.TestCase):
     def setUp(self):
         self.create_simple_map = lambda maps_dimension: [
             [
-                [x, y] for y in range(maps_dimension)
+                (x, y) for y in range(maps_dimension)
             ] for x in range(maps_dimension)
         ]
-        self.create_simple_message = lambda message_dimension: [
-            [
-                10 * x + y for y in range(message_dimension)
-            ] for x in range(message_dimension)
-        ]
+        self.plainimage = Image.fromarray(
+            np.random.randint(0, 256, 27, 'B').reshape(3, 3, 3)
+        )
 
     def test_type_zero_period(self):
         acm = ACM(_a=1, _b=1, number_of_iteration=8)
@@ -29,9 +30,9 @@ class TestAcmDiscreete(unittest.TestCase):
 
     def test_encrypt_decrypt(self):
         acm = ACM(_a=1, _b=1, number_of_iteration=1)
-        ciphertext = acm.encrypt(self.create_simple_message(7))
-        actual = acm.decrypt(ciphertext)
-        expected = self.create_simple_message(7)
+        cipherimage = acm.encrypt(self.plainimage)
+        actual = acm.decrypt(cipherimage)
+        expected = self.plainimage
         self.assertEqual(actual, expected)
 
 
@@ -39,14 +40,12 @@ class TestAcmGeneralEqual(unittest.TestCase):
     def setUp(self):
         self.create_simple_map = lambda maps_dimension: [
             [
-                [x, y] for y in range(maps_dimension)
+                (x, y) for y in range(maps_dimension)
             ] for x in range(maps_dimension)
         ]
-        self.create_simple_message = lambda message_dimension: [
-            [
-                10 * x + y for y in range(message_dimension)
-            ] for x in range(message_dimension)
-        ]
+        self.plainimage = Image.fromarray(
+            np.random.randint(0, 256, 27, 'B').reshape(3, 3, 3)
+        )
 
     def test_type_one_period(self):
         acm = ACM(_a=3, _b=3, number_of_iteration=3)
@@ -62,9 +61,9 @@ class TestAcmGeneralEqual(unittest.TestCase):
 
     def test_encrypt_decrypt(self):
         acm = ACM(_a=3, _b=3, number_of_iteration=1)
-        ciphertext = acm.encrypt(self.create_simple_message(9))
-        actual = acm.decrypt(ciphertext)
-        expected = self.create_simple_message(9)
+        cipherimage = acm.encrypt(self.plainimage)
+        actual = acm.decrypt(cipherimage)
+        expected = self.plainimage
         self.assertEqual(actual, expected)
 
 
@@ -73,14 +72,12 @@ class TestAcmGeneralDifferent(unittest.TestCase):
     def setUp(self):
         self.create_simple_map = lambda maps_dimension: [
             [
-                [x, y] for y in range(maps_dimension)
+                (x, y) for y in range(maps_dimension)
             ] for x in range(maps_dimension)
         ]
-        self.create_simple_message = lambda message_dimension: [
-            [
-                10 * x + y for y in range(message_dimension)
-            ] for x in range(message_dimension)
-        ]
+        self.plainimage = Image.fromarray(
+            np.random.randint(0, 256, 27, 'B').reshape(3, 3, 3)
+        )
 
     def test_type_one_period(self):
         acm = ACM(_a=2, _b=3, number_of_iteration=4)
@@ -96,7 +93,7 @@ class TestAcmGeneralDifferent(unittest.TestCase):
 
     def test_encrypt_decrypt(self):
         acm = ACM(_a=1, _b=2, number_of_iteration=1)
-        ciphertext = acm.encrypt(self.create_simple_message(5))
-        actual = acm.decrypt(ciphertext)
-        expected = self.create_simple_message(5)
+        cipherimage = acm.encrypt(self.plainimage)
+        actual = acm.decrypt(cipherimage)
+        expected = self.plainimage
         self.assertEqual(actual, expected)

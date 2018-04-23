@@ -21,33 +21,27 @@ class Application:
         plainbytes = transform.pad_bytes(plainfile)
 
         # RANDOMIZE TEXT
-        randomized_bytes = self.__rt.encrypt(plainbytes)
+        cipherbytes = self.__rt.encrypt(plainbytes)
 
         # TRANSFORMATION
-        pixels = transform.compile_bytes_to_pixels(randomized_bytes)
-        pixel_matrix = transform.compile_pixels_to_matrix(pixels)
+        ciphermatrix = transform.bytes_to_matrix(cipherbytes)
+        plainimage = transform.matrix_to_image(ciphermatrix)
 
         # ARNOLD'S CAT MAP
-        ciphermatrix = self.__acm.encrypt(pixel_matrix)
-
-        # TRANSFORMATION
-        cipherimage = transform.matrix_to_image(ciphermatrix)
+        cipherimage = self.__acm.encrypt(plainimage)
 
         return cipherimage
 
     def decrypt(self, cipherimage):
-        # TRANSFORMATION
-        ciphermatrix = transform.image_to_matrix(cipherimage)
-
         # ARNOLD'S CAT MAP
-        pixel_matrix = self.__acm.decrypt(ciphermatrix)
+        plainimage = self.__acm.decrypt(cipherimage)
 
         # TRANSFORMATION
-        pixels = transform.decompile_matrix_to_pixels(pixel_matrix)
-        randomized_bytes = transform.decompile_pixels_to_bytes(pixels)
+        ciphermatrix = transform.image_to_matrix(plainimage)
+        cipherbytes = transform.matrix_to_bytes(ciphermatrix)
 
         # DERANDOMIZED TEXT
-        plainbytes = self.__rt.decrypt(randomized_bytes)
+        plainbytes = self.__rt.decrypt(cipherbytes)
 
         # TRANSFORMATION
         plainfile = transform.strip_bytes(plainbytes)
