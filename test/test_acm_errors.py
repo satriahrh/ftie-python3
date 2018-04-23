@@ -1,6 +1,7 @@
 import unittest
 from blocks.acm import ACM
-from errors import ValidationError, DiscoveryError
+from errors import ValidationError
+from PIL import Image
 
 
 class TestAcmConstructor(unittest.TestCase):
@@ -44,7 +45,7 @@ class TestACMGetMap(unittest.TestCase):
             self.fail('Validation is succeed and no errors')
         except ValidationError as validation_error:
             actual = validation_error.errors
-            expected = "maps_dimension is too small"
+            expected = "image dimension is too small"
             self.assertEqual(expected, actual)
 
     def test_validation_get_map_problem(self):
@@ -53,7 +54,7 @@ class TestACMGetMap(unittest.TestCase):
             self.fail('Validation is succeed and no errors')
         except ValidationError as validation_error:
             actual = validation_error.errors
-            expected = "maps_dimension is too small"
+            expected = "image dimension is too small"
             self.assertEqual(expected, actual)
 
 
@@ -64,44 +65,22 @@ class TestACMEncryptDecrypt(unittest.TestCase):
     @unittest.expectedFailure
     def test_validation_encrypt_matrix_is_good(self):
         try:
-            matrix = [[0, 0, ], [1, 1, ]]
-            self.acm.encrypt(matrix)
-            self.acm.decrypt(matrix)
+            image = Image.new('L', (5, 5))
+            self.acm.encrypt(image)
+            self.acm.decrypt(image)
             self.fail('Validation is succeed and no errors')
         except ValidationError as validation_error:
             actual = validation_error.errors
-            expected = "matrix is not a square matrix"
+            expected = "image is not a square image"
             self.assertEqual(expected, actual)
 
     def test_validation_encrypt_matrix_square_problem(self):
         try:
-            matrix = [[0, 1, 2], [0, 1, 2]]
-            self.acm.encrypt(matrix)
-            self.acm.decrypt(matrix)
+            image = Image.new('L', (5, 3))
+            self.acm.encrypt(image)
+            self.acm.decrypt(image)
             self.fail('Validation is succeed and no errors')
         except ValidationError as validation_error:
             actual = validation_error.errors
-            expected = "matrix is not a square matrix"
-            self.assertEqual(expected, actual)
-
-    def test_validation_encrypt_matrix_consistency_problem_1(self):
-        try:
-            matrix = [[0, 1, 2, ], [0, 1, 2, 3, ], [0, 1, 2, ], ]
-            self.acm.encrypt(matrix)
-            self.acm.decrypt(matrix)
-            self.fail('Validation is succeed and no errors')
-        except DiscoveryError as err:
-            actual = err.errors
-            expected = "this is not a consistent matrix"
-            self.assertEqual(expected, actual)
-
-    def test_validation_encrypt_matrix_consistency_problem_2(self):
-        try:
-            matrix = [[0, 1, 2, ], [0, 1, ], [0, 1, 2, ], ]
-            self.acm.encrypt(matrix)
-            self.acm.decrypt(matrix)
-            self.fail('Validation is succeed and no errors')
-        except DiscoveryError as err:
-            actual = err.errors
-            expected = "this is not a consistent matrix"
+            expected = "image is not a square image"
             self.assertEqual(expected, actual)

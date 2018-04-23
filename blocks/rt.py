@@ -1,14 +1,11 @@
 from blocks.bbs import BBS
-from errors import ValidationError, DiscoveryError
-from suplementary import number_theory as nt
+from errors import ValidationError
+
+import numpy as np
 
 
 class RT:
-    def __init__(self, bbs):
-        """
-        INPUT
-        bbs         blocks.bbs.BBS
-        """
+    def __init__(self, bbs: BBS):
         if type(bbs) != BBS:
             raise ValidationError(
                 "Create a right bbs",
@@ -16,95 +13,30 @@ class RT:
             )
         self.__bbs = bbs
 
-    def encrypt(self, plainbytes):
-        """
-        INPUT
-        plainbytes    bytes which length is N
-        OUTPUT
-        randomized_bytes   bytes [which length is 2N
-        """
-        if type(plainbytes) is not bytes:
-            raise ValidationError(
-                "Try another plainbytes",
-                "plainbytes is not bytes type"
-            )
-        from random import randint
-        randomized_bytes = bytearray()
-        for byte in plainbytes:
-            random = randint(0, 256)
+    def encrypt(self, plainbytes: np.ndarray):
+        cipherbytes = np.zeros(2 * plainbytes.size, np.dtype('B'))
+        random = np.random.randint(
+            low=0, high=255, size=plainbytes.size, dtype='B'
+        )
+        for i in range(plainbytes.size):
             key = self.__bbs.next()
-            randomized_bytes.append(
-                nt.mod_add(
-                    nt.mod_add(
-                        key,
-                        nt.mod_mul(
-                            2,
-                            byte,
-                            256
-                        ),
-                        256
-                    ),
-                    random,
-                    256
-                )
-            )
-            randomized_bytes.append(
-                nt.mod_add(
-                    nt.mod_add(
-                        nt.mod_mul(
-                            2,
-                            key,
-                            256
-                        ),
-                        byte,
-                        256
-                    ),
-                    random,
-                    256
-                )
-            )
-        randomized_bytes = bytes(randomized_bytes)
+            cipherbytes[2 * i] = \
+                key + 2 * plainbytes[i] + random[i]
+            cipherbytes[2 * i + 1] = \
+                2 * key + plainbytes[i] + random[i]
 
-        return randomized_bytes
+        return cipherbytes
 
-    def decrypt(self, randomized_bytes):
-        """
-        INPUT
-        randomized_bytes   bytes [which length is 2N
-        OUTPUT
-        plainbytes    bytes which length is N
-        """
-        if type(randomized_bytes) is not bytes:
-            raise ValidationError(
-                "Try another randomized_bytes",
-                "randomized_bytes is not bytes type"
-            )
-        len_rb = len(randomized_bytes)
-        if len_rb % 2 != 0:
+    def decrypt(self, cipherbytes: np.ndarray):
+        if cipherbytes.size % 2 != 0:
             raise ValidationError(
                 "Try another ciphertext: an even lengthed",
                 "odd lengthed ciphertext"
             )
-        plainbytes = bytearray()
-        for i in range(int(len(randomized_bytes) / 2)):
+        plainbytes = np.zeros(cipherbytes.size // 2, np.dtype('B'))
+        for i in range(plainbytes.size):
             key = self.__bbs.next()
-            # TODO investigate wether we need use modular operation on each unit
-            plainbytes.append(
-                nt.mod_add(
-                    nt.mod_add(
-                        randomized_bytes[2 * i],
-                        nt.mod_mul(
-                            -1,
-                            randomized_bytes[2 * i + 1],
-                            256
-                        ),
-                        256
-                    ),
-                    key,
-                    256
-                )
-            )
-
-        plainbytes = bytes(plainbytes)
+            plainbytes[i] = \
+                cipherbytes[2 * i] - cipherbytes[2 * i + 1] + key
 
         return plainbytes
