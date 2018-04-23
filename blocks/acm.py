@@ -1,5 +1,6 @@
 from suplementary import number_theory as nt
 from errors import ValidationError, DiscoveryError
+from PIL import Image
 
 
 class ACM:
@@ -31,13 +32,13 @@ class ACM:
             self.__type = 1
         else:
             self.__type = 2
-            import numpy as np
             self.__A = [
                 [1, _a],
                 [_b, 1 + _a * _b]
             ]
 
     # TODO to private function
+    # TODO: do optimization using numpy
     def get_map(self, maps_dimension):
         try:
             return self.__map[maps_dimension]
@@ -45,7 +46,7 @@ class ACM:
             if maps_dimension < 2:
                 raise ValidationError(
                     "Try different maps_dimension",
-                    "maps_dimension is too small"
+                    "image dimension is too small"
                 )
 
             ret = None
@@ -63,7 +64,7 @@ class ACM:
     def __mapping_zero(self, maps_dimension):
         mapping = [
             [
-                [
+                (
                     (
                         nt.fibonacy(2 * self.__number_of_iteration - 1) * x
                         + nt.fibonacy(2 * self.__number_of_iteration) * y
@@ -72,7 +73,7 @@ class ACM:
                         nt.fibonacy(2 * self.__number_of_iteration) * x
                         + nt.fibonacy(2 * self.__number_of_iteration + 1) * y
                     ) % maps_dimension
-                ]
+                )
                 for y in range(maps_dimension)
             ] for x in range(maps_dimension)
         ]
@@ -82,7 +83,7 @@ class ACM:
     def __mapping_one(self, maps_dimension):
         mapping = [
             [
-                [
+                (
                     (
                         nt.fibonacy_a(
                             self.__a, 2 * self.__number_of_iteration - 1
@@ -99,7 +100,7 @@ class ACM:
                             self.__a, 2 * self.__number_of_iteration + 1
                         ) * y
                     ) % maps_dimension
-                ]
+                )
                 for y in range(maps_dimension)
             ] for x in range(maps_dimension)
         ]
@@ -115,7 +116,7 @@ class ACM:
 
         mapping = [
             [
-                [
+                (
                     nt.mod_add(
                         nt.mod_mul(A_n[0][0], x, maps_dimension),
                         nt.mod_mul(A_n[0][1], y, maps_dimension),
@@ -125,82 +126,52 @@ class ACM:
                         nt.mod_mul(A_n[1][1], y, maps_dimension),
                         maps_dimension
                     )
-                ]
+                )
                 for y in range(maps_dimension)
             ] for x in range(maps_dimension)
         ]
 
         return mapping
 
-    def __check_input_matrix(self, matrix):
-        row_count = len(matrix[0])
-        column_count = len(matrix)
-
-        if row_count != column_count:
+    def __check_input_matrix(self, image):
+        if image.size[0] != image.size[1]:
             raise ValidationError(
                 "Try different matrix",
-                "matrix is not a square matrix"
+                "image is not a square image"
             )
 
-        if row_count < 2:
+        if image.size[0] < 2:
             raise ValidationError(
                 "Try different maps_dimension",
-                "maps_dimension is too small"
+                "image dimension is too small"
             )
 
-    def encrypt(self, matrix):
-        self.__check_input_matrix(matrix)
+    def encrypt(self, plainimage: Image):
+        self.__check_input_matrix(plainimage)
 
-        maps_dimension = len(matrix)
+        maps_dimension = plainimage.size[0]
         maps = self.get_map(maps_dimension)
 
-        ret = []
-        for x, row in enumerate(matrix):
-            len_row = len(row)
-            if len_row != maps_dimension:
-                raise DiscoveryError(
-                    "Try another matrix",
-                    "this is not a consistent matrix"
-                )
-            ret.append([])
-            for y in range(len_row):
-                try:
-                    _map = maps[x][y]
-                    ret[x].append(matrix[_map[0]][_map[1]])
-                except IndexError:
-                    raise DiscoveryError(
-                        "Try another matrix",
-                        "this is not a consistent matrix"
-                    )
+        cipherimage = Image.new(plainimage.mode, plainimage.size)
+        for x in range(maps_dimension):
+            for y in range(maps_dimension):
+                _map = maps[x][y]
+                new_px = plainimage.getpixel(_map)
+                cipherimage.putpixel((x, y), new_px)
 
-        return ret
+        return cipherimage
 
-    def decrypt(self, matrix):
-        self.__check_input_matrix(matrix)
+    def decrypt(self, cipherimage: Image):
+        self.__check_input_matrix(cipherimage)
 
-        maps_dimension = len(matrix)
+        maps_dimension = cipherimage.size[0]
         maps = self.get_map(maps_dimension)
 
-        ret = [
-            [None for y in range(maps_dimension)]
-            for x in range(maps_dimension)
-        ]
-
-        for x, row in enumerate(matrix):
-            len_row = len(row)
-            if len_row != maps_dimension:
-                raise DiscoveryError(
-                    "Try another matrix",
-                    "this is not a consistent matrix"
-                )
-            for y in range(len_row):
-                try:
+        plainimage = Image.new(cipherimage.mode, cipherimage.size)
+        for x in range(maps_dimension):
+            for y in range(maps_dimension):
                     _map = maps[x][y]
-                    ret[_map[0]][_map[1]] = matrix[x][y]
-                except IndexError:
-                    raise DiscoveryError(
-                        "Try another matrix",
-                        "this is not a consistent matrix"
-                    )
+                    new_px = cipherimage.getpixel((x, y))
+                    plainimage.putpixel(_map, new_px)
 
-        return ret
+        return plainimage
