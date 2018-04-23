@@ -1,6 +1,3 @@
-from errors import ValidationError
-
-
 def file_to_bytes(filepath):
     with open(filepath, 'rb') as fstream:
         byte_array = fstream.read()

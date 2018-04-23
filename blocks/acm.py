@@ -31,7 +31,6 @@ class ACM:
             self.__type = 1
         else:
             self.__type = 2
-            import numpy as np
             self.__A = [
                 [1, _a],
                 [_b, 1 + _a * _b]

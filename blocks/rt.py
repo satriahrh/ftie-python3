@@ -1,5 +1,5 @@
 from blocks.bbs import BBS
-from errors import ValidationError, DiscoveryError
+from errors import ValidationError
 from suplementary import number_theory as nt
 
 
@@ -88,7 +88,6 @@ class RT:
         plainbytes = bytearray()
         for i in range(int(len(randomized_bytes) / 2)):
             key = self.__bbs.next()
-            # TODO investigate wether we need use modular operation on each unit
             plainbytes.append(
                 nt.mod_add(
                     nt.mod_add(
