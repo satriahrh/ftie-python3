@@ -19,7 +19,7 @@ class BBS:
                 "Try different pairs of p and q",
                 "p or q are not prime"
             )
-        if not (seed > 0 and seed < _p * _p):
+        if not (seed > 0 and seed < _p * _q):
             raise ValidationError(
                 "Try different pairs of p and q",
                 "s is to small or to big"
@@ -35,5 +35,5 @@ class BBS:
         self.__seed = seed
 
     def next(self):
-        self.__seed = nt.mod_pow(self.__seed, 2, self.__modulo)
+        self.__seed = self.__seed ** 2 % self.__modulo
         return self.__seed
