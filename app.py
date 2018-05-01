@@ -18,7 +18,8 @@ class Application:
 
     def encrypt(self, plainfile):
         # TRANSFORMATION
-        plainbytes = transform.pad_bytes(plainfile)
+        plainbytes = transform.encryption_formatting(plainfile)
+        plainbytes = transform.pad_bytes(plainbytes)
 
         # RANDOMIZE TEXT
         cipherbytes = self.__rt.encrypt(plainbytes)
@@ -44,6 +45,7 @@ class Application:
         plainbytes = self.__rt.decrypt(cipherbytes)
 
         # TRANSFORMATION
-        plainfile = transform.strip_bytes(plainbytes)
+        plainbytes = transform.strip_bytes(plainbytes)
+        plainfile = transform.decryption_formatting(plainbytes)
 
         return plainfile
