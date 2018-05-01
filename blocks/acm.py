@@ -66,12 +66,24 @@ class ACM:
             [
                 (
                     (
-                        nt.fibonacy(2 * self.__number_of_iteration - 1) * x
-                        + nt.fibonacy(2 * self.__number_of_iteration) * y
+                        nt.fibonacy(
+                            2 * self.__number_of_iteration - 1,
+                            m=maps_dimension
+                        ) * x
+                        + nt.fibonacy(
+                            2 * self.__number_of_iteration,
+                            m=maps_dimension
+                        ) * y
                     ) % maps_dimension,
                     (
-                        nt.fibonacy(2 * self.__number_of_iteration) * x
-                        + nt.fibonacy(2 * self.__number_of_iteration + 1) * y
+                        nt.fibonacy(
+                            2 * self.__number_of_iteration,
+                            m=maps_dimension
+                        ) * x
+                        + nt.fibonacy(
+                            2 * self.__number_of_iteration + 1,
+                            m=maps_dimension
+                        ) * y
                     ) % maps_dimension
                 )
                 for y in range(maps_dimension)
@@ -85,19 +97,27 @@ class ACM:
             [
                 (
                     (
-                        nt.fibonacy_a(
-                            self.__a, 2 * self.__number_of_iteration - 1
+                        nt.fibonacy(
+                            2 * self.__number_of_iteration - 1,
+                            a=self.__a,
+                            m=maps_dimension
                         ) * x
-                        + nt.fibonacy_a(
-                            self.__a, 2 * self.__number_of_iteration
+                        + nt.fibonacy(
+                            2 * self.__number_of_iteration,
+                            a=self.__a,
+                            m=maps_dimension
                         ) * y
                     ) % maps_dimension,
                     (
-                        nt.fibonacy_a(
-                            self.__a, 2 * self.__number_of_iteration
+                        nt.fibonacy(
+                            2 * self.__number_of_iteration,
+                            a=self.__a,
+                            m=maps_dimension
                         ) * x
-                        + nt.fibonacy_a(
-                            self.__a, 2 * self.__number_of_iteration + 1
+                        + nt.fibonacy(
+                            2 * self.__number_of_iteration + 1,
+                            a=self.__a,
+                            m=maps_dimension
                         ) * y
                     ) % maps_dimension
                 )

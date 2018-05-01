@@ -10,25 +10,23 @@ def is_prime(_p):
     return True
 
 # TODO create unittest
-FIBONACY = {0: 0, 1: 1,}
-def fibonacy(n):
+FIBONACY = {}
+def fibonacy(n, a=1, m=65536):
     try:
-        return FIBONACY[n]
+        try:
+            return FIBONACY[(a, m)][n]
+        except KeyError:
+            FIBONACY[(a, m)] = {0: 0, 1: 1}
+            return FIBONACY[(a, m)][n]
     except KeyError:
         for i in range(2, n + 1):
-            FIBONACY[i] = fibonacy(i - 1) + fibonacy(i - 2)
-        return FIBONACY[n]
-
-
-# TODO create unittest
-FIBONACY_A = {0: 0, 1: 1, }
-def fibonacy_a(a, n):
-    try:
-        return FIBONACY_A[n]
-    except KeyError:
-        for i in range(2, n + 1):
-            FIBONACY_A[i] = a * fibonacy_a(a, i - 1) + fibonacy_a(a, i - 2)
-        return FIBONACY_A[n]
+            FIBONACY[(a, m)][i] = \
+                mod_add(
+                    mod_mul(a, fibonacy(i - 1, a, m), m),
+                    fibonacy(i - 2, a, m),
+                    m
+                )
+        return FIBONACY[(a, m)][n]
 
 
 mod_add = \
