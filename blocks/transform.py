@@ -1,24 +1,28 @@
-import numpy as np
 from PIL import Image
 
-
-def bytes_to_matrix(bts: bytes):
-    dimension = int((len(bts) // 3) ** 0.5)
-    matrix = np.array(bts, np.dtype('B')).reshape(dimension, dimension, 3)
-
-    return matrix
+import numpy as np
+import math as mt
 
 
-def matrix_to_bytes(matrix: np.ndarray):
-    return matrix.reshape(matrix.size)
+def encryption_formatting(plainfile: bytes):
+    return np.frombuffer(plainfile, np.dtype('B'))
 
 
-def matrix_to_image(matrix: np.ndarray):
-    image = Image.fromarray(
-        matrix
-    )
+def decryption_formatting(plainbytes: np.ndarray):
+    return plainbytes.tobytes()
 
-    return image
+
+def bytes_to_matrix(plainbytes: np.ndarray):
+    dimension = int(mt.sqrt((len(plainbytes) // 3)))
+    return np.array(plainbytes, np.dtype('B')).reshape(dimension, dimension, 3)
+
+
+def matrix_to_bytes(ciphermatrix: np.ndarray):
+    return ciphermatrix.reshape(ciphermatrix.size)
+
+
+def matrix_to_image(ciphermatrix: np.ndarray):
+    return Image.fromarray(ciphermatrix)
 
 
 def image_to_matrix(image: Image):
@@ -27,16 +31,14 @@ def image_to_matrix(image: Image):
 
 # PADDING
 def pad_bytes(bts: np.ndarray):
-    from math import ceil, sqrt
-
     len_bts = bts.size
     len_rdt = len_bts * 2
-    len_pixels = ceil(len_rdt / 3)
+    len_pixels = mt.ceil(len_rdt / 3)
 
     # ESTIMASI N matrix
     # ceil untuk mendapatkan jumlah yang diinginkan
     # kita mencari N genap, agar bisa dibagi 2 untuk RDT
-    n_matrix = ceil(sqrt(len_pixels))
+    n_matrix = mt.ceil(mt.sqrt(len_pixels))
     if n_matrix % 2 == 1:
         n_matrix += 1
 
