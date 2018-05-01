@@ -1,9 +1,11 @@
-import numpy as np
 from PIL import Image
 
+import numpy as np
+import math as mt
 
-def bytes_to_matrix(bts: bytes):
-    dimension = int((len(bts) // 3) ** 0.5)
+
+def bytes_to_matrix(bts: np.ndarray):
+    dimension = int(mt.sqrt((len(bts) // 3)))
     matrix = np.array(bts, np.dtype('B')).reshape(dimension, dimension, 3)
 
     return matrix
@@ -27,16 +29,14 @@ def image_to_matrix(image: Image):
 
 # PADDING
 def pad_bytes(bts: np.ndarray):
-    from math import ceil, sqrt
-
     len_bts = bts.size
     len_rdt = len_bts * 2
-    len_pixels = ceil(len_rdt / 3)
+    len_pixels = mt.ceil(len_rdt / 3)
 
     # ESTIMASI N matrix
     # ceil untuk mendapatkan jumlah yang diinginkan
     # kita mencari N genap, agar bisa dibagi 2 untuk RDT
-    n_matrix = ceil(sqrt(len_pixels))
+    n_matrix = mt.ceil(mt.sqrt(len_pixels))
     if n_matrix % 2 == 1:
         n_matrix += 1
 
