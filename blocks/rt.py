@@ -12,6 +12,7 @@ class RT:
                 "bbs is not BBS type"
             )
         self.__bbs = bbs
+        np.seterr(over='ignore')
 
     def encrypt(self, plainbytes: np.ndarray):
         cipherbytes = np.zeros(2 * plainbytes.size, np.dtype('B'))
