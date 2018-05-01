@@ -35,5 +35,5 @@ class BBS:
         self.__seed = seed
 
     def next(self):
-        self.__seed = self.__seed ** 2 % self.__modulo
+        self.__seed = nt.mod_pow(self.__seed, 2, self.__modulo)
         return self.__seed

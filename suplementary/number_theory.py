@@ -1,6 +1,6 @@
 import functools
-import operator
 import math
+
 
 def is_prime(_p):
     if _p < 2:
@@ -10,26 +10,23 @@ def is_prime(_p):
             return False
     return True
 
-# TODO create unittest
-FIBONACY = {0: 0, 1: 1,}
-def fibonacy(_n):
-    try:
-        return FIBONACY[_n]
-    except KeyError:
-        for i in range(2, _n + 1):
-            FIBONACY[i] = fibonacy(i - 1) + fibonacy(i - 2)
-        return FIBONACY[_n]
 
-
-# TODO create unittest
-FIBONACY_A = {0: 0, 1: 1, }
-def fibonacy_a(_a, _n):
+def fibonacy(n, a=1, m=65536, FIBONACY={}):
     try:
-        return FIBONACY_A[_n]
+        try:
+            return FIBONACY[(a, m)][n]
+        except KeyError:
+            FIBONACY[(a, m)] = {0: 0, 1: 1}
+            return FIBONACY[(a, m)][n]
     except KeyError:
-        for i in range(2, _n + 1):
-            FIBONACY_A[i] = _a * fibonacy_a(_a, i - 1) + fibonacy_a(_a, i - 2)
-        return FIBONACY_A[_n]
+        for i in range(2, n + 1):
+            FIBONACY[(a, m)][i] = \
+                mod_add(
+                    mod_mul(a, fibonacy(i - 1, a, m, FIBONACY), m),
+                    fibonacy(i - 2, a, m, FIBONACY),
+                    m
+                )
+        return FIBONACY[(a, m)][n]
 
 
 mod_add = \
@@ -37,17 +34,14 @@ mod_add = \
 
 
 mod_mul = \
-    lambda a, b, modulus: functools.reduce(
-        (lambda p, q: mod_add(p, q, modulus)),
-        [0, ] + [a for x in range(b)]
-    )
+    lambda a, b, modulus: (a * b) % modulus
 
 
 mod_pow = \
     lambda base, exponent, modulus: \
     functools.reduce(
         (lambda p, q: mod_mul(p, q, modulus)),
-        [1, ] + [base for x in range(exponent)]
+        [1] + [base] * exponent
     )
 
 
@@ -71,7 +65,6 @@ matrix_identity = lambda N: \
     ]
 
 
-# TODO refactor mod_matrix_pow to functional function
 def mod_matrix_pow(base_matrix, exponent, modulus):
     if exponent == 0:
         return matrix_identity(
@@ -96,24 +89,3 @@ def mod_matrix_pow(base_matrix, exponent, modulus):
         d_matrix,
         modulus
     )
-
-
-def soe(n):
-    if n < 100:
-        n = 100
-    P = [
-        True for x in range(n)
-    ]
-
-    i = 2
-    while i < math.sqrt(n):
-        if P[i]:
-            j = i + i
-            while j < n:
-                P[j] = False
-                j += i
-        i += 1
-
-    return [
-        x for x in range(2, n) if P[x]
-    ]
