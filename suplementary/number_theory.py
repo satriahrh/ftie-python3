@@ -1,6 +1,7 @@
 from functools import reduce
 import math
 
+
 def is_prime(_p):
     if _p < 2:
         return False
@@ -9,9 +10,8 @@ def is_prime(_p):
             return False
     return True
 
-# TODO create unittest
-FIBONACY = {}
-def fibonacy(n, a=1, m=65536):
+
+def fibonacy(n, a=1, m=65536, FIBONACY={}):
     try:
         try:
             return FIBONACY[(a, m)][n]
@@ -22,8 +22,8 @@ def fibonacy(n, a=1, m=65536):
         for i in range(2, n + 1):
             FIBONACY[(a, m)][i] = \
                 mod_add(
-                    mod_mul(a, fibonacy(i - 1, a, m), m),
-                    fibonacy(i - 2, a, m),
+                    mod_mul(a, fibonacy(i - 1, a, m, FIBONACY), m),
+                    fibonacy(i - 2, a, m, FIBONACY),
                     m
                 )
         return FIBONACY[(a, m)][n]
@@ -65,7 +65,6 @@ matrix_identity = lambda N: \
     ]
 
 
-# TODO refactor mod_matrix_pow to functional function
 def mod_matrix_pow(base_matrix, exponent, modulus):
     if exponent == 0:
         return matrix_identity(
