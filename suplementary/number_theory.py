@@ -93,30 +93,3 @@ def mod_matrix_pow(base_matrix, exponent, modulus):
         d_matrix,
         modulus
     )
-# mod_matrix_pow = \
-#     lambda base_matrix, exponent, modulus: \
-#     matrix_identity(
-#         len(base_matrix)
-#     ) if exponent == 0 else \
-#     mod_matrix_mul(
-#         base_matrix,
-#         mod_matrix_pow(
-#             base_matrix,
-#             exponent - 1,
-#             modulus
-#         ),
-#         modulus
-#     ) if exponent % 2 == 1 else \
-#     mod_matrix_mul(
-#         mod_matrix_pow(
-#             base_matrix,
-#             exponent // 2,
-#             modulus
-#         ),
-#         mod_matrix_pow(
-#             base_matrix,
-#             exponent // 2,
-#             modulus
-#         ),
-#         modulus
-#     )
