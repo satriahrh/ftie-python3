@@ -34,17 +34,14 @@ mod_add = \
 
 
 mod_mul = \
-    lambda a, b, modulus: reduce(
-        (lambda p, q: mod_add(p, q, modulus)),
-        [0, ] + [a for x in range(b)]
-    )
+    lambda a, b, modulus: (a * b) % modulus
 
 
 mod_pow = \
     lambda base, exponent, modulus: \
     reduce(
         (lambda p, q: mod_mul(p, q, modulus)),
-        [1, ] + [base for x in range(exponent)]
+        [1] + [base] * exponent
     )
 
 
