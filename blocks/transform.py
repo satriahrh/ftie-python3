@@ -4,23 +4,25 @@ import numpy as np
 import math as mt
 
 
-def bytes_to_matrix(bts: np.ndarray):
-    dimension = int(mt.sqrt((len(bts) // 3)))
-    matrix = np.array(bts, np.dtype('B')).reshape(dimension, dimension, 3)
-
-    return matrix
+def encryption_formatting(plainfile: bytes):
+    return np.frombuffer(plainfile, np.dtype('B'))
 
 
-def matrix_to_bytes(matrix: np.ndarray):
-    return matrix.reshape(matrix.size)
+def decryption_formatting(plainbytes: np.ndarray):
+    return plainbytes.tobytes()
 
 
-def matrix_to_image(matrix: np.ndarray):
-    image = Image.fromarray(
-        matrix
-    )
+def bytes_to_matrix(plainbytes: np.ndarray):
+    dimension = int(mt.sqrt((len(plainbytes) // 3)))
+    return np.array(plainbytes, np.dtype('B')).reshape(dimension, dimension, 3)
 
-    return image
+
+def matrix_to_bytes(ciphermatrix: np.ndarray):
+    return ciphermatrix.reshape(ciphermatrix.size)
+
+
+def matrix_to_image(ciphermatrix: np.ndarray):
+    return Image.fromarray(ciphermatrix)
 
 
 def image_to_matrix(image: Image):
