@@ -25,7 +25,7 @@ class BBS:
                 "s is to small or to big"
             )
         import math
-        if math.gcd(_p * _p, seed) != 1:
+        if math.gcd(_p * _q, seed) != 1:
             raise ValidationError(
                 "Try different pairs of p and q",
                 "(p * q) and s are not relatively prime"
