@@ -24,7 +24,7 @@ class ACM:
 
         self.__a = _a
         self.__b = _b
-        self.__number_of_iteration = number_of_iteration
+        self.__n = number_of_iteration
         self.__map = {}
 
         if _a == 1 and _b == 1:
@@ -63,41 +63,38 @@ class ACM:
             return ret
 
     def __mapping_zero(self, maps_dimension):
+        N = maps_dimension
+
         mapping = np.zeros(
-            2 * (maps_dimension ** 2),
-            np.dtype('I')
-        ).reshape(
-            maps_dimension,
-            maps_dimension,
-            2
-        )
+            2 * (N ** 2), np.dtype('I')
+        ).reshape(N, N, 2)
 
         x = 0
-        while x < maps_dimension:
+        while x < N:
             y = 0
-            while y < maps_dimension:
+            while y < N:
                 mapping[x, y] = (
                     nt.mod_add(
                         nt.mod_mul(
-                            nt.fibonacy(2 * self.__number_of_iteration - 1, m=maps_dimension),
+                            nt.fibonacy(2 * self.__n - 1, m=N),
                             x,
-                            maps_dimension
+                            N
                         ), nt.mod_mul(
-                            nt.fibonacy(2 * self.__number_of_iteration, m=maps_dimension),
+                            nt.fibonacy(2 * self.__n, m=N),
                             y,
-                            maps_dimension
-                        ), maps_dimension
+                            N
+                        ), N
                     ),
                     nt.mod_add(
                         nt.mod_mul(
-                            nt.fibonacy(2 * self.__number_of_iteration, m=maps_dimension),
+                            nt.fibonacy(2 * self.__n, m=N),
                             x,
-                            maps_dimension
+                            N
                         ), nt.mod_mul(
-                            nt.fibonacy(2 * self.__number_of_iteration + 1, m=maps_dimension),
+                            nt.fibonacy(2 * self.__n + 1, m=N),
                             y,
-                            maps_dimension
-                        ), maps_dimension
+                            N
+                        ), N
                     )
                 )
                 y += 1
@@ -106,41 +103,38 @@ class ACM:
         return mapping
 
     def __mapping_one(self, maps_dimension):
+        N = maps_dimension
+
         mapping = np.zeros(
-            2 * (maps_dimension ** 2),
-            np.dtype('I')
-        ).reshape(
-            maps_dimension,
-            maps_dimension,
-            2
-        )
+            2 * (N ** 2), np.dtype('I')
+        ).reshape(N, N, 2)
 
         x = 0
-        while x < maps_dimension:
+        while x < N:
             y = 0
-            while y < maps_dimension:
+            while y < N:
                 mapping[x, y] = (
                     nt.mod_add(
                         nt.mod_mul(
-                            nt.fibonacy(2 * self.__number_of_iteration - 1, a=self.__a, m=maps_dimension),
+                            nt.fibonacy(2 * self.__n - 1, a=self.__a, m=N),
                             x,
-                            maps_dimension
+                            N
                         ), nt.mod_mul(
-                            nt.fibonacy(2 * self.__number_of_iteration, a=self.__a, m=maps_dimension),
+                            nt.fibonacy(2 * self.__n, a=self.__a, m=N),
                             y,
-                            maps_dimension
-                        ), maps_dimension
+                            N
+                        ), N
                     ),
                     nt.mod_add(
                         nt.mod_mul(
-                            nt.fibonacy(2 * self.__number_of_iteration, a=self.__a, m=maps_dimension),
+                            nt.fibonacy(2 * self.__n, a=self.__a, m=N),
                             x,
-                            maps_dimension
+                            N
                         ), nt.mod_mul(
-                            nt.fibonacy(2 * self.__number_of_iteration + 1, a=self.__a, m=maps_dimension),
+                            nt.fibonacy(2 * self.__n + 1, a=self.__a, m=N),
                             y,
-                            maps_dimension
-                        ), maps_dimension
+                            N
+                        ), N
                     )
                 )
                 y += 1
@@ -149,34 +143,31 @@ class ACM:
         return mapping
 
     def __mapping_two(self, maps_dimension):
+        N = maps_dimension
+
         A_n = nt.mod_matrix_pow(
             self.__A,
-            self.__number_of_iteration,
-            maps_dimension
+            self.__n,
+            N
         )
 
         mapping = np.zeros(
-            2 * (maps_dimension ** 2),
-            np.dtype('I')
-        ).reshape(
-            maps_dimension,
-            maps_dimension,
-            2
-        )
+            2 * (N ** 2), np.dtype('I')
+        ).reshape(N, N, 2)
 
         x = 0
-        while x < maps_dimension:
+        while x < N:
             y = 0
-            while y < maps_dimension:
+            while y < N:
                 mapping[x, y] = (
                     nt.mod_add(
-                        nt.mod_mul(A_n[0][0], x, maps_dimension),
-                        nt.mod_mul(A_n[0][1], y, maps_dimension),
-                        maps_dimension
+                        nt.mod_mul(A_n[0][0], x, N),
+                        nt.mod_mul(A_n[0][1], y, N),
+                        N
                     ), nt.mod_add(
-                        nt.mod_mul(A_n[1][0], x, maps_dimension),
-                        nt.mod_mul(A_n[1][1], y, maps_dimension),
-                        maps_dimension
+                        nt.mod_mul(A_n[1][0], x, N),
+                        nt.mod_mul(A_n[1][1], y, N),
+                        N
                     )
                 )
                 y += 1
@@ -185,7 +176,6 @@ class ACM:
         return mapping
 
     def __check_input_matrix(self, matrix):
-        print(matrix.shape)
         if matrix.shape[0] != matrix.shape[1]:
             raise ValidationError(
                 "Try different matrix",
