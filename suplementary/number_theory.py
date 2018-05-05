@@ -1,12 +1,14 @@
 from functools import reduce
-import math
+
+import math as mt
+import numpy as np
 
 
-def is_prime(_p):
-    if _p < 2:
+def is_prime(p):
+    if p < 2:
         return False
-    for i in range(2, math.floor(math.sqrt(_p)) + 1):
-        if _p % i == 0:
+    for i in range(2, mt.floor(mt.sqrt(p)) + 1):
+        if p % i == 0:
             return False
     return True
 
@@ -30,62 +32,44 @@ def fibonacy(n, a=1, m=65536, FIBONACY={}):
 
 
 mod_add = \
-    lambda a, b, modulus: (a + b) % modulus
+    lambda a, b, m: (a + b) % m
 
 
 mod_mul = \
-    lambda a, b, modulus: (a * b) % modulus
+    lambda a, b, m: (a * b) % m
 
 
 mod_pow = \
-    lambda base, exponent, modulus: \
+    lambda b, e, m: \
     reduce(
-        (lambda p, q: mod_mul(p, q, modulus)),
-        [1] + [base] * exponent
+        (lambda p, q: mod_mul(p, q, m)),
+        [1] + [b] * e
     )
 
 
-mod_matrix_mul = lambda A, B, modulus: [
-    [
-        reduce(
-            lambda p, q: mod_add(p, q, modulus),
-            [mod_mul(A[i][k], B[k][j], modulus) for k in range(len(B))]
-        )
-        for j in range(len(B[0]))
-    ]
-    for i in range(len(A))
-]
+def mod_matrix_mul(A, B, m):
+    R = np.zeros((A.shape[0], B.shape[1]), np.dtype('I'))
+
+    for i in range(A.shape[0]):
+        for j in range(B.shape[1]):
+            R[i, j] = reduce(
+                lambda p, q: mod_add(p, q, m),
+                [mod_mul(A[i][k], B[k][j], m) for k in range(B.shape[0])]
+            )
+            j += 1
+        i += 1
+
+    return R
 
 
-__identity = lambda x, y: 1 if x == y else 0
-matrix_identity = lambda N: \
-    [
-        [__identity(x, y) for y in range(N)]
-        for x in range(N)
-    ]
-
-
-def mod_matrix_pow(base_matrix, exponent, modulus):
-    if exponent == 0:
-        return matrix_identity(
-            len(base_matrix)
-        )
-    if exponent % 2 == 1:
+def mod_matrix_pow(B, e, m):
+    if e == 0:
+        return np.eye(B.shape[0])
+    if e % 2 == 1:
         return mod_matrix_mul(
-            base_matrix,
-            mod_matrix_pow(
-                base_matrix,
-                exponent - 1,
-                modulus
-            ), modulus
+            B,
+            mod_matrix_pow(B, e - 1, m),
+            m
         )
-    d_matrix = mod_matrix_pow(
-        base_matrix,
-        exponent // 2,
-        modulus
-    )
-    return mod_matrix_mul(
-        d_matrix,
-        d_matrix,
-        modulus
-    )
+    D = mod_matrix_pow(B, e // 2, m)
+    return mod_matrix_mul(D, D, m)

@@ -8,8 +8,8 @@ import numpy as np
 class TestEncryptionDecryption(unittest.TestCase):
     def setUp(self):
         self.__plainbytes = np.random.randint(0, 256, 19, 'B')
-        self.__alice = RT(BBS(_p=7, _q=11, seed=9))
-        self.__bob = RT(BBS(_p=7, _q=11, seed=9))
+        self.__alice = RT(BBS(p=7, q=11, s=9))
+        self.__bob = RT(BBS(p=7, q=11, s=9))
 
     def test_encryption_succeed(self):
         ciphertext = self.__alice.encrypt(self.__plainbytes)
@@ -28,8 +28,8 @@ class TestEncryptionDecryption(unittest.TestCase):
 class TestAliceAndBob(unittest.TestCase):
     def setUp(self):
         self.__plainbytes = np.random.randint(0, 256, 19, 'B')
-        self.__alice = RT(BBS(_p=7, _q=11, seed=9))
-        self.__bob = RT(BBS(_p=7, _q=11, seed=9))
+        self.__alice = RT(BBS(p=7, q=11, s=9))
+        self.__bob = RT(BBS(p=7, q=11, s=9))
 
     def test_alice_and_bob_are_swinging(self):
         # round 1

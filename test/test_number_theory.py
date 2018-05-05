@@ -1,22 +1,23 @@
 import unittest
 import suplementary.number_theory as nt
+import numpy as np
 
 
 class TestIsPrime(unittest.TestCase):
     def test_p_is_prime(self):
-        actual = nt.is_prime(_p=5)
+        actual = nt.is_prime(p=5)
         self.assertTrue(actual)
 
     def test_p_is_not_prime(self):
-        actual = nt.is_prime(_p=6)
+        actual = nt.is_prime(p=6)
         self.assertFalse(actual)
 
     def test_p_is_less_than_two(self):
-        actual = nt.is_prime(_p=1)
+        actual = nt.is_prime(p=1)
         self.assertFalse(actual)
 
     def test_p_is_root(self):
-        actual = nt.is_prime(_p=9)
+        actual = nt.is_prime(p=9)
         self.assertFalse(actual)
 
 
@@ -43,32 +44,32 @@ class TestMod(unittest.TestCase):
                 self.assertEqual(expected[i], actual)
 
     def test_mod_matrix_mul(self):
-        A = [
+        A = np.array([
             [1, 3],
             [3, 4]
-        ]
+        ])
 
-        B = [
+        B = np.array([
             [5, 0],
             [1, 2]
-        ]
+        ])
 
-        expected = [
+        expected = np.array([
             [2, 0],
             [1, 2]
-        ]
+        ])
 
         actual = nt.mod_matrix_mul(A, B, 6)
 
-        self.assertEqual(expected, actual)
+        self.assertTrue(np.array_equal(expected, actual))
 
     def test_mod_matrix_pow(self):
-        base_matrix = [
+        base_matrix = np.array([
             [1, 2],
             [3, 4]
-        ]
+        ])
 
-        expected = [
+        expected = np.array([
             [
                 [1, 0],
                 [0, 1]
@@ -79,9 +80,9 @@ class TestMod(unittest.TestCase):
                 [2, 0],
                 [0, 2]
             ],
-        ]
+        ])
 
         for i in range(3):
             with self.subTest(i=i):
                 actual = nt.mod_matrix_pow(base_matrix, i, 5)
-                self.assertEqual(expected[i], actual)
+                self.assertTrue(np.array_equal(expected[i], actual))

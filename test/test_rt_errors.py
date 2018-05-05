@@ -11,7 +11,7 @@ class TestRTConstructor(unittest.TestCase):
     @unittest.expectedFailure
     def test_validation_constructor_is_good(self):
         try:
-            bbs = BBS(_p=7, _q=11, seed=8)
+            bbs = BBS(p=7, q=11, s=8)
             RT(bbs)
             self.fail('Validation is succeed and no errors')
         except ValidationError as err:
@@ -31,20 +31,20 @@ class TestRTConstructor(unittest.TestCase):
 
 class TestRTEncryptDecrypt(unittest.TestCase):
     def test_encrypt_is_good(self):
-        bbs = BBS(_p=7, _q=11, seed=8)
+        bbs = BBS(p=7, q=11, s=8)
         rt = RT(bbs)
         rt.encrypt(np.zeros(10))
         self.assert_(True)
 
     def test_decrypt_is_good(self):
-        bbs = BBS(_p=7, _q=11, seed=8)
+        bbs = BBS(p=7, q=11, s=8)
         rt = RT(bbs)
         rt.decrypt(np.zeros(10))
         self.assert_(True)
 #
 #     def test_encrypt_not_int(self):
 #         with self.assertRaises(ValidationError) as err:
-#             bbs = BBS(_p=7, _q=11, seed=8)
+#             bbs = BBS(p=7, q=11, s=8)
 #             rt = RT(bbs)
 #             rt.encrypt(['1', '2'])
 #
@@ -55,7 +55,7 @@ class TestRTEncryptDecrypt(unittest.TestCase):
 #
 #     def test_decrypt_not_int(self):
 #         try:
-#             bbs = BBS(_p=7, _q=11, seed=8)
+#             bbs = BBS(p=7, q=11, s=8)
 #             rt = RT(bbs)
 #             rt.decrypt(['1', '2'])
 #             self.fail('Validation is succeed and no errors')
@@ -66,7 +66,7 @@ class TestRTEncryptDecrypt(unittest.TestCase):
 #
 #     def test_decrypt_odd(self):
 #         try:
-#             bbs = BBS(_p=7, _q=11, seed=8)
+#             bbs = BBS(p=7, q=11, s=8)
 #             rt = RT(bbs)
 #             rt.decrypt(bytes(1))
 #             self.fail('Validation is succeed and no errors')

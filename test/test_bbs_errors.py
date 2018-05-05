@@ -6,7 +6,7 @@ from errors import ValidationError
 class TestPAndQEquality(unittest.TestCase):
     def test_validation_p_is_equal_to_q(self):
         try:
-            BBS(_p=5, _q=5, seed=3)
+            BBS(p=5, q=5, s=3)
             self.fail('Validation is succeed and no errors')
         except ValidationError as validation_error:
             actual = validation_error.errors
@@ -16,7 +16,7 @@ class TestPAndQEquality(unittest.TestCase):
     @unittest.expectedFailure
     def test_validation_p_is_not_equal_to_q(self):
         try:
-            BBS(_p=1, _q=2, seed=3)
+            BBS(p=1, q=2, s=3)
             self.fail('Validation is succeed and no errors')
         except ValidationError as validation_error:
             actual = validation_error.errors
@@ -27,7 +27,7 @@ class TestPAndQEquality(unittest.TestCase):
 class TestPAndQCongruency(unittest.TestCase):
     def test_validation_p_mod_4_are_not_3(self):
         try:
-            BBS(_p=1, _q=3, seed=3)
+            BBS(p=1, q=3, s=3)
             self.fail('Validation is succeed and no errors')
         except ValidationError as validation_error:
             actual = validation_error.errors
@@ -36,7 +36,7 @@ class TestPAndQCongruency(unittest.TestCase):
 
     def test_validation_q_mod_4_are_not_3(self):
         try:
-            BBS(_p=3, _q=2, seed=3)
+            BBS(p=3, q=2, s=3)
             self.fail('Validation is succeed and no errors')
         except ValidationError as validation_error:
             actual = validation_error.errors
@@ -45,7 +45,7 @@ class TestPAndQCongruency(unittest.TestCase):
 
     def test_validation_p_q_both_mod_4_are_not_3(self):
         try:
-            BBS(_p=1, _q=2, seed=3)
+            BBS(p=1, q=2, s=3)
             self.fail('Validation is succeed and no errors')
         except ValidationError as validation_error:
             actual = validation_error.errors
@@ -55,7 +55,7 @@ class TestPAndQCongruency(unittest.TestCase):
     @unittest.expectedFailure
     def test_validation_p_q_both_mod_4_are_3(self):
         try:
-            BBS(_p=7, _q=11, seed=3)
+            BBS(p=7, q=11, s=3)
             self.fail('Validation is succeed and no errors')
         except ValidationError as validation_error:
             actual = validation_error.errors
@@ -66,7 +66,7 @@ class TestPAndQCongruency(unittest.TestCase):
 class TestPAndQPrimality(unittest.TestCase):
     def test_validation_p_is_not_prime_q_is_prime(self):
         try:
-            BBS(_p=15, _q=3, seed=3)
+            BBS(p=15, q=3, s=3)
             self.fail('Validation is succeed and no errors')
         except ValidationError as validation_error:
             actual = validation_error.errors
@@ -75,7 +75,7 @@ class TestPAndQPrimality(unittest.TestCase):
 
     def test_validation_p_is_prime_q_is_not_prime(self):
         try:
-            BBS(_p=3, _q=15, seed=3)
+            BBS(p=3, q=15, s=3)
             self.fail('Validation is succeed and no errors')
         except ValidationError as validation_error:
             actual = validation_error.errors
@@ -84,7 +84,7 @@ class TestPAndQPrimality(unittest.TestCase):
 
     def test_validation_p_and_q_are_not_prime(self):
         try:
-            BBS(_p=27, _q=15, seed=3)
+            BBS(p=27, q=15, s=3)
             self.fail('Validation is succeed and no errors')
         except ValidationError as validation_error:
             actual = validation_error.errors
@@ -94,7 +94,7 @@ class TestPAndQPrimality(unittest.TestCase):
     @unittest.expectedFailure
     def test_validation_p_and_q_are_prime(self):
         try:
-            BBS(_p=3, _q=7, seed=3)
+            BBS(p=3, q=7, s=3)
             self.fail('Validation is succeed and no errors')
         except ValidationError as validation_error:
             actual = validation_error.errors
@@ -105,7 +105,7 @@ class TestPAndQPrimality(unittest.TestCase):
 class TestSInRange(unittest.TestCase):
     def test_validation_s_is_too_small(self):
         try:
-            BBS(_p=7, _q=11, seed=-3)
+            BBS(p=7, q=11, s=-3)
             self.fail('Validation is succeed and no errors')
         except ValidationError as validation_error:
             actual = validation_error.errors
@@ -114,7 +114,7 @@ class TestSInRange(unittest.TestCase):
 
     def test_validation_s_is_too_big(self):
         try:
-            BBS(_p=7, _q=11, seed=78)
+            BBS(p=7, q=11, s=78)
             self.fail('Validation is succeed and no errors')
         except ValidationError as validation_error:
             actual = validation_error.errors
@@ -124,7 +124,7 @@ class TestSInRange(unittest.TestCase):
     @unittest.expectedFailure
     def test_validation_s_is_in_range(self):
         try:
-            BBS(_p=7, _q=11, seed=8)
+            BBS(p=7, q=11, s=8)
             self.fail('Validation is succeed and no errors')
         except ValidationError as validation_error:
             actual = validation_error.errors
@@ -135,7 +135,7 @@ class TestSInRange(unittest.TestCase):
 class TestPAndSPrimeRelativity(unittest.TestCase):
     def test_validation_s_and_m_are_not_relatively_prime(self):
         try:
-            BBS(_p=7, _q=11, seed=7)
+            BBS(p=7, q=11, s=7)
             self.fail('Validation is succeed and no errors')
         except ValidationError as validation_error:
             actual = validation_error.errors
@@ -145,7 +145,7 @@ class TestPAndSPrimeRelativity(unittest.TestCase):
     @unittest.expectedFailure
     def test_validation_s_and_m_are_relatively_prime(self):
         try:
-            BBS(_p=7, _q=11, seed=8)
+            BBS(p=7, q=11, s=8)
             self.fail('Validation is succeed and no errors')
         except ValidationError as validation_error:
             actual = validation_error.errors
