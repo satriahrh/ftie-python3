@@ -69,10 +69,8 @@ class ACM:
             2 * (N ** 2), np.dtype('I')
         ).reshape(N, N, 2)
 
-        x = 0
-        while x < N:
-            y = 0
-            while y < N:
+        for x in range(N):
+            for y in range(N):
                 mapping[x, y] = (
                     nt.mod_add(
                         nt.mod_mul(nt.fibonacy(2 * self.__n - 1, m=N), x, N),
@@ -85,8 +83,6 @@ class ACM:
                         N
                     )
                 )
-                y += 1
-            x += 1
 
         return mapping
 
@@ -97,10 +93,8 @@ class ACM:
             2 * (N ** 2), np.dtype('I')
         ).reshape(N, N, 2)
 
-        x = 0
-        while x < N:
-            y = 0
-            while y < N:
+        for x in range(N):
+            for y in range(N):
                 mapping[x, y] = (
                     nt.mod_add(
                         nt.mod_mul(nt.fibonacy(2 * self.__n - 1, a=self.__a, m=N), x, N),
@@ -113,8 +107,6 @@ class ACM:
                         N
                     )
                 )
-                y += 1
-            x += 1
 
         return mapping
 
@@ -131,10 +123,8 @@ class ACM:
             2 * (N ** 2), np.dtype('I')
         ).reshape(N, N, 2)
 
-        x = 0
-        while x < N:
-            y = 0
-            while y < N:
+        for x in range(N):
+            for y in range(N):
                 mapping[x, y] = (
                     nt.mod_add(
                         nt.mod_mul(A_n[0][0], x, N),
@@ -146,8 +136,6 @@ class ACM:
                         N
                     )
                 )
-                y += 1
-            x += 1
 
         return mapping
 
@@ -175,7 +163,6 @@ class ACM:
             for y in range(maps_dimension):
                 _map = maps[x][y]
                 new_val = plainmatrix[_map[0], _map[1]]
-                # print(new_val)
                 ciphermatrix[x, y] = new_val
 
         return ciphermatrix
@@ -189,8 +176,8 @@ class ACM:
         plainmatrix = ciphermatrix.copy()
         for x in range(maps_dimension):
             for y in range(maps_dimension):
-                    _map = maps[x][y]
-                    new_val = ciphermatrix[x, y]
-                    plainmatrix[_map[0], _map[1]] = new_val
+                _map = maps[x][y]
+                new_val = ciphermatrix[x, y]
+                plainmatrix[_map[0], _map[1]] = new_val
 
         return plainmatrix

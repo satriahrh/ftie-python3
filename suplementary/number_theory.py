@@ -50,10 +50,8 @@ mod_pow = \
 def mod_matrix_mul(A, B, m):
     R = np.zeros((A.shape[0], B.shape[1]), np.dtype('I'))
 
-    i = 0
-    while i < A.shape[0]:
-        j = 0
-        while j < B.shape[1]:
+    for i in range(A.shape[0]):
+        for j in range(B.shape[1]):
             R[i, j] = reduce(
                 lambda p, q: mod_add(p, q, m),
                 [mod_mul(A[i][k], B[k][j], m) for k in range(B.shape[0])]
@@ -62,7 +60,6 @@ def mod_matrix_mul(A, B, m):
         i += 1
 
     return R
-
 
 
 def mod_matrix_pow(B, e, m):
