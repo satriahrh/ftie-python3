@@ -4,11 +4,11 @@ import numpy as np
 import math as mt
 
 
-def encryption_formatting(plainfile: bytes):
+def buffer_to_bytes(plainfile: bytes):
     return np.frombuffer(plainfile, np.dtype('B'))
 
 
-def decryption_formatting(plainbytes: np.ndarray):
+def bytes_to_buffer(plainbytes: np.ndarray):
     return plainbytes.tobytes()
 
 
