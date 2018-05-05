@@ -25,21 +25,25 @@ class Application:
         cipherbytes = self.__rt.encrypt(plainbytes)
 
         # TRANSFORMATION
-        ciphermatrix = transform.bytes_to_matrix(cipherbytes)
-        plainimage = transform.matrix_to_image(ciphermatrix)
+        plainmatrix = transform.bytes_to_matrix(cipherbytes)
 
         # ARNOLD'S CAT MAP
-        cipherimage = self.__acm.encrypt(plainimage)
+        ciphermatrix = self.__acm.encrypt(plainmatrix)
+
+        # TRANSFORMATION
+        cipherimage = transform.matrix_to_image(ciphermatrix)
 
         return cipherimage
 
     def decrypt(self, cipherimage):
+        # TRANSFORMATION
+        ciphermatrix = transform.image_to_matrix(cipherimage)
+
         # ARNOLD'S CAT MAP
-        plainimage = self.__acm.decrypt(cipherimage)
+        plainmatrix = self.__acm.decrypt(ciphermatrix)
 
         # TRANSFORMATION
-        ciphermatrix = transform.image_to_matrix(plainimage)
-        cipherbytes = transform.matrix_to_bytes(ciphermatrix)
+        cipherbytes = transform.matrix_to_bytes(plainmatrix)
 
         # DERANDOMIZED TEXT
         plainbytes = self.__rt.decrypt(cipherbytes)
