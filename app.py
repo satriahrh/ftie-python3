@@ -4,17 +4,17 @@ from blocks import acm, bbs, rt, transform
 class Application:
     def __init__(
         self,
-        bbs_p, bbs_q, bbs_seed,
-        acm_a, acm_b, acm_n,
+        p, q, s,
+        a, b, n,
     ):
         # BBS
-        self.__bbs = bbs.BBS(_p=bbs_p, _q=bbs_q, seed=bbs_seed)
+        self.__bbs = bbs.BBS(p=p, q=q, s=s)
 
         # RT
         self.__rt = rt.RT(self.__bbs)
 
         # ACM
-        self.__acm = acm.ACM(_a=acm_a, _b=acm_b, number_of_iteration=acm_n)
+        self.__acm = acm.ACM(a=a, b=b, n=n)
 
     def encrypt(self, plainfile):
         # TRANSFORMATION

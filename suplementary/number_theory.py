@@ -2,11 +2,11 @@ from functools import reduce
 import math
 
 
-def is_prime(_p):
-    if _p < 2:
+def is_prime(p):
+    if p < 2:
         return False
-    for i in range(2, math.floor(math.sqrt(_p)) + 1):
-        if _p % i == 0:
+    for i in range(2, math.floor(math.sqrt(p)) + 1):
+        if p % i == 0:
             return False
     return True
 

@@ -5,37 +5,37 @@ import numpy as np
 
 
 class ACM:
-    def __init__(self, _a, _b, number_of_iteration):
+    def __init__(self, a, b, n):
         """
         INPUT
         a       int
         b       int
         """
-        if (_a < 1) or (_b < 1):
+        if (a < 1) or (b < 1):
             raise ValidationError(
                 "Try different pairs of a and b",
                 "a or b is no more than 1"
             )
-        if number_of_iteration < 1:
+        if n < 1:
             raise ValidationError(
                 "Try different number_of_iteration",
                 "number_of_iteration is too small"
             )
 
-        self.__a = _a
-        self.__b = _b
-        self.__n = number_of_iteration
+        self.__a = a
+        self.__b = b
+        self.__n = n
         self.__map = {}
 
-        if _a == 1 and _b == 1:
+        if a == 1 and b == 1:
             self.__type = 0
-        elif _a == _b:
+        elif a == b:
             self.__type = 1
         else:
             self.__type = 2
             self.__A = [
-                [1, _a],
-                [_b, 1 + _a * _b]
+                [1, a],
+                [b, 1 + a * b]
             ]
 
     # TODO to private function

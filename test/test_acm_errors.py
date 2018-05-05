@@ -9,7 +9,7 @@ class TestAcmConstructor(unittest.TestCase):
     @unittest.expectedFailure
     def test_validation_constructor_is_good(self):
         try:
-            ACM(_a=1, _b=1, number_of_iteration=400)
+            ACM(a=1, b=1, n=400)
             self.fail('Validation is succeed and no errors')
         except ValidationError as validation_error:
             actual = validation_error.errors
@@ -18,7 +18,7 @@ class TestAcmConstructor(unittest.TestCase):
 
     def test_validation_a_and_b_problem(self):
         try:
-            ACM(_a=0, _b=5, number_of_iteration=400)
+            ACM(a=0, b=5, n=400)
             self.fail('Validation is succeed and no errors')
         except ValidationError as validation_error:
             actual = validation_error.errors
@@ -27,7 +27,7 @@ class TestAcmConstructor(unittest.TestCase):
 
     def test_validation_number_of_iteration_problem(self):
         try:
-            ACM(_a=1, _b=1, number_of_iteration=0)
+            ACM(a=1, b=1, n=0)
             self.fail('Validation is succeed and no errors')
         except ValidationError as validation_error:
             actual = validation_error.errors
@@ -37,7 +37,7 @@ class TestAcmConstructor(unittest.TestCase):
 
 class TestACMGetMap(unittest.TestCase):
     def setUp(self):
-        self.acm = ACM(_a=1, _b=1, number_of_iteration=2)
+        self.acm = ACM(a=1, b=1, n=2)
 
     @unittest.expectedFailure
     def test_validation_get_map_is_good(self):
@@ -61,7 +61,7 @@ class TestACMGetMap(unittest.TestCase):
 
 class TestACMEncryptDecrypt(unittest.TestCase):
     def setUp(self):
-        self.acm = ACM(_a=1, _b=1, number_of_iteration=2)
+        self.acm = ACM(a=1, b=1, n=2)
 
     @unittest.expectedFailure
     def test_validation_encrypt_matrix_is_good(self):
