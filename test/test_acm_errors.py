@@ -1,7 +1,8 @@
 import unittest
 from blocks.acm import ACM
 from errors import ValidationError
-from PIL import Image
+
+import numpy as np
 
 
 class TestAcmConstructor(unittest.TestCase):
@@ -45,7 +46,7 @@ class TestACMGetMap(unittest.TestCase):
             self.fail('Validation is succeed and no errors')
         except ValidationError as validation_error:
             actual = validation_error.errors
-            expected = "image dimension is too small"
+            expected = "matrix dimension is too small"
             self.assertEqual(expected, actual)
 
     def test_validation_get_map_problem(self):
@@ -54,7 +55,7 @@ class TestACMGetMap(unittest.TestCase):
             self.fail('Validation is succeed and no errors')
         except ValidationError as validation_error:
             actual = validation_error.errors
-            expected = "image dimension is too small"
+            expected = "matrix dimension is too small"
             self.assertEqual(expected, actual)
 
 
@@ -65,22 +66,22 @@ class TestACMEncryptDecrypt(unittest.TestCase):
     @unittest.expectedFailure
     def test_validation_encrypt_matrix_is_good(self):
         try:
-            image = Image.new('L', (5, 5))
-            self.acm.encrypt(image)
-            self.acm.decrypt(image)
+            matrix = np.ones(5, 5)
+            self.acm.encrypt(matrix)
+            self.acm.decrypt(matrix)
             self.fail('Validation is succeed and no errors')
         except ValidationError as validation_error:
             actual = validation_error.errors
-            expected = "image is not a square image"
+            expected = "matrix is not a square matrix"
             self.assertEqual(expected, actual)
 
     def test_validation_encrypt_matrix_square_problem(self):
         try:
-            image = Image.new('L', (5, 3))
-            self.acm.encrypt(image)
-            self.acm.decrypt(image)
+            matrix = np.ones((5, 3))
+            self.acm.encrypt(matrix)
+            self.acm.decrypt(matrix)
             self.fail('Validation is succeed and no errors')
         except ValidationError as validation_error:
             actual = validation_error.errors
-            expected = "image is not a square image"
+            expected = "matrix is not a square matrix"
             self.assertEqual(expected, actual)

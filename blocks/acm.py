@@ -1,6 +1,7 @@
 from suplementary import number_theory as nt
-from errors import ValidationError, DiscoveryError
-from PIL import Image
+from errors import ValidationError
+
+import numpy as np
 
 
 class ACM:
@@ -46,7 +47,7 @@ class ACM:
             if maps_dimension < 2:
                 raise ValidationError(
                     "Try different maps_dimension",
-                    "image dimension is too small"
+                    "matrix dimension is too small"
                 )
 
             ret = None
@@ -62,9 +63,20 @@ class ACM:
             return ret
 
     def __mapping_zero(self, maps_dimension):
-        mapping = [
-            [
-                (
+        mapping = np.zeros(
+            2 * (maps_dimension ** 2),
+            np.dtype('I')
+        ).reshape(
+            maps_dimension,
+            maps_dimension,
+            2
+        )
+
+        x = 0
+        while x < maps_dimension:
+            y = 0
+            while y < maps_dimension:
+                mapping[x, y] = (
                     (
                         nt.fibonacy(
                             2 * self.__number_of_iteration - 1,
@@ -86,16 +98,26 @@ class ACM:
                         ) * y
                     ) % maps_dimension
                 )
-                for y in range(maps_dimension)
-            ] for x in range(maps_dimension)
-        ]
+                y += 1
+            x += 1
 
         return mapping
 
     def __mapping_one(self, maps_dimension):
-        mapping = [
-            [
-                (
+        mapping = np.zeros(
+            2 * (maps_dimension ** 2),
+            np.dtype('I')
+        ).reshape(
+            maps_dimension,
+            maps_dimension,
+            2
+        )
+
+        x = 0
+        while x < maps_dimension:
+            y = 0
+            while y < maps_dimension:
+                mapping[x, y] = (
                     (
                         nt.fibonacy(
                             2 * self.__number_of_iteration - 1,
@@ -121,9 +143,8 @@ class ACM:
                         ) * y
                     ) % maps_dimension
                 )
-                for y in range(maps_dimension)
-            ] for x in range(maps_dimension)
-        ]
+                y += 1
+            x += 1
 
         return mapping
 
@@ -134,9 +155,20 @@ class ACM:
             maps_dimension
         )
 
-        mapping = [
-            [
-                (
+        mapping = np.zeros(
+            2 * (maps_dimension ** 2),
+            np.dtype('I')
+        ).reshape(
+            maps_dimension,
+            maps_dimension,
+            2
+        )
+
+        x = 0
+        while x < maps_dimension:
+            y = 0
+            while y < maps_dimension:
+                mapping[x, y] = (
                     nt.mod_add(
                         nt.mod_mul(A_n[0][0], x, maps_dimension),
                         nt.mod_mul(A_n[0][1], y, maps_dimension),
@@ -147,51 +179,52 @@ class ACM:
                         maps_dimension
                     )
                 )
-                for y in range(maps_dimension)
-            ] for x in range(maps_dimension)
-        ]
+                y += 1
+            x += 1
 
         return mapping
 
-    def __check_input_matrix(self, image):
-        if image.size[0] != image.size[1]:
+    def __check_input_matrix(self, matrix):
+        print(matrix.shape)
+        if matrix.shape[0] != matrix.shape[1]:
             raise ValidationError(
                 "Try different matrix",
-                "image is not a square image"
+                "matrix is not a square matrix"
             )
 
-        if image.size[0] < 2:
+        if matrix.shape[0] < 2:
             raise ValidationError(
                 "Try different maps_dimension",
-                "image dimension is too small"
+                "matrix dimension is too small"
             )
 
-    def encrypt(self, plainimage: Image):
-        self.__check_input_matrix(plainimage)
+    def encrypt(self, plainmatrix: np.ndarray):
+        self.__check_input_matrix(plainmatrix)
 
-        maps_dimension = plainimage.size[0]
+        maps_dimension = plainmatrix.shape[0]
         maps = self.get_map(maps_dimension)
 
-        cipherimage = Image.new(plainimage.mode, plainimage.size)
+        ciphermatrix = plainmatrix.copy()
         for x in range(maps_dimension):
             for y in range(maps_dimension):
                 _map = maps[x][y]
-                new_px = plainimage.getpixel(_map)
-                cipherimage.putpixel((x, y), new_px)
+                new_val = plainmatrix[_map[0], _map[1]]
+                # print(new_val)
+                ciphermatrix[x, y] = new_val
 
-        return cipherimage
+        return ciphermatrix
 
-    def decrypt(self, cipherimage: Image):
-        self.__check_input_matrix(cipherimage)
+    def decrypt(self, ciphermatrix: np.ndarray):
+        self.__check_input_matrix(ciphermatrix)
 
-        maps_dimension = cipherimage.size[0]
+        maps_dimension = ciphermatrix.shape[0]
         maps = self.get_map(maps_dimension)
 
-        plainimage = Image.new(cipherimage.mode, cipherimage.size)
+        plainmatrix = ciphermatrix.copy()
         for x in range(maps_dimension):
             for y in range(maps_dimension):
                     _map = maps[x][y]
-                    new_px = cipherimage.getpixel((x, y))
-                    plainimage.putpixel(_map, new_px)
+                    new_val = ciphermatrix[x, y]
+                    plainmatrix[_map[0], _map[1]] = new_val
 
-        return plainimage
+        return plainmatrix
