@@ -75,26 +75,14 @@ class ACM:
             while y < N:
                 mapping[x, y] = (
                     nt.mod_add(
-                        nt.mod_mul(
-                            nt.fibonacy(2 * self.__n - 1, m=N),
-                            x,
-                            N
-                        ), nt.mod_mul(
-                            nt.fibonacy(2 * self.__n, m=N),
-                            y,
-                            N
-                        ), N
+                        nt.mod_mul(nt.fibonacy(2 * self.__n - 1, m=N), x, N),
+                        nt.mod_mul(nt.fibonacy(2 * self.__n, m=N), y, N),
+                        N
                     ),
                     nt.mod_add(
-                        nt.mod_mul(
-                            nt.fibonacy(2 * self.__n, m=N),
-                            x,
-                            N
-                        ), nt.mod_mul(
-                            nt.fibonacy(2 * self.__n + 1, m=N),
-                            y,
-                            N
-                        ), N
+                        nt.mod_mul(nt.fibonacy(2 * self.__n, m=N), x, N),
+                        nt.mod_mul(nt.fibonacy(2 * self.__n + 1, m=N), y, N),
+                        N
                     )
                 )
                 y += 1
@@ -115,26 +103,14 @@ class ACM:
             while y < N:
                 mapping[x, y] = (
                     nt.mod_add(
-                        nt.mod_mul(
-                            nt.fibonacy(2 * self.__n - 1, a=self.__a, m=N),
-                            x,
-                            N
-                        ), nt.mod_mul(
-                            nt.fibonacy(2 * self.__n, a=self.__a, m=N),
-                            y,
-                            N
-                        ), N
+                        nt.mod_mul(nt.fibonacy(2 * self.__n - 1, a=self.__a, m=N), x, N),
+                        nt.mod_mul(nt.fibonacy(2 * self.__n, a=self.__a, m=N), y, N),
+                        N
                     ),
                     nt.mod_add(
-                        nt.mod_mul(
-                            nt.fibonacy(2 * self.__n, a=self.__a, m=N),
-                            x,
-                            N
-                        ), nt.mod_mul(
-                            nt.fibonacy(2 * self.__n + 1, a=self.__a, m=N),
-                            y,
-                            N
-                        ), N
+                        nt.mod_mul(nt.fibonacy(2 * self.__n, a=self.__a, m=N), x, N),
+                        nt.mod_mul(nt.fibonacy(2 * self.__n + 1, a=self.__a, m=N), y, N),
+                        N
                     )
                 )
                 y += 1
