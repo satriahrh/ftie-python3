@@ -33,10 +33,10 @@ class ACM:
             self.__type = 1
         else:
             self.__type = 2
-            self.__A = [
+            self.__A = np.array([
                 [1, a],
                 [b, 1 + a * b]
-            ]
+            ], np.dtype('B'))
 
     # TODO to private function
     # TODO: do optimization using numpy
