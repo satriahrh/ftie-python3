@@ -77,26 +77,28 @@ class ACM:
             y = 0
             while y < maps_dimension:
                 mapping[x, y] = (
-                    (
-                        nt.fibonacy(
-                            2 * self.__number_of_iteration - 1,
-                            m=maps_dimension
-                        ) * x
-                        + nt.fibonacy(
-                            2 * self.__number_of_iteration,
-                            m=maps_dimension
-                        ) * y
-                    ) % maps_dimension,
-                    (
-                        nt.fibonacy(
-                            2 * self.__number_of_iteration,
-                            m=maps_dimension
-                        ) * x
-                        + nt.fibonacy(
-                            2 * self.__number_of_iteration + 1,
-                            m=maps_dimension
-                        ) * y
-                    ) % maps_dimension
+                    nt.mod_add(
+                        nt.mod_mul(
+                            nt.fibonacy(2 * self.__number_of_iteration - 1, m=maps_dimension),
+                            x,
+                            maps_dimension
+                        ), nt.mod_mul(
+                            nt.fibonacy(2 * self.__number_of_iteration, m=maps_dimension),
+                            y,
+                            maps_dimension
+                        ), maps_dimension
+                    ),
+                    nt.mod_add(
+                        nt.mod_mul(
+                            nt.fibonacy(2 * self.__number_of_iteration, m=maps_dimension),
+                            x,
+                            maps_dimension
+                        ), nt.mod_mul(
+                            nt.fibonacy(2 * self.__number_of_iteration + 1, m=maps_dimension),
+                            y,
+                            maps_dimension
+                        ), maps_dimension
+                    )
                 )
                 y += 1
             x += 1
@@ -118,30 +120,28 @@ class ACM:
             y = 0
             while y < maps_dimension:
                 mapping[x, y] = (
-                    (
-                        nt.fibonacy(
-                            2 * self.__number_of_iteration - 1,
-                            a=self.__a,
-                            m=maps_dimension
-                        ) * x
-                        + nt.fibonacy(
-                            2 * self.__number_of_iteration,
-                            a=self.__a,
-                            m=maps_dimension
-                        ) * y
-                    ) % maps_dimension,
-                    (
-                        nt.fibonacy(
-                            2 * self.__number_of_iteration,
-                            a=self.__a,
-                            m=maps_dimension
-                        ) * x
-                        + nt.fibonacy(
-                            2 * self.__number_of_iteration + 1,
-                            a=self.__a,
-                            m=maps_dimension
-                        ) * y
-                    ) % maps_dimension
+                    nt.mod_add(
+                        nt.mod_mul(
+                            nt.fibonacy(2 * self.__number_of_iteration - 1, a=self.__a, m=maps_dimension),
+                            x,
+                            maps_dimension
+                        ), nt.mod_mul(
+                            nt.fibonacy(2 * self.__number_of_iteration, a=self.__a, m=maps_dimension),
+                            y,
+                            maps_dimension
+                        ), maps_dimension
+                    ),
+                    nt.mod_add(
+                        nt.mod_mul(
+                            nt.fibonacy(2 * self.__number_of_iteration, a=self.__a, m=maps_dimension),
+                            x,
+                            maps_dimension
+                        ), nt.mod_mul(
+                            nt.fibonacy(2 * self.__number_of_iteration + 1, a=self.__a, m=maps_dimension),
+                            y,
+                            maps_dimension
+                        ), maps_dimension
+                    )
                 )
                 y += 1
             x += 1
