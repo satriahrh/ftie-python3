@@ -1,49 +1,78 @@
 # Resolving Known Plaintext Attack on FTIE-RT-ACM
-This repository means to be a remote repository for any code on a research of **Resolving Known Plaintext Attack on FTIE-RT-ACM**.
-This research actually is my final project in pursuing the bachelor of [Informatics Engineering at Universitas Telkom](http://bif.telkomuniversity.ac.id/).
 
-## Project Link
-I made the project log available from Research Gate using the following link
-> https://www.researchgate.net/project/Resolving-Known-Plaintext-Attack-on-FTIE-RT-ACM
-
-## Research Proposal Abstract
-[File to Image Encryption (FTIE-RT-ACM)](https://www.researchgate.net/publication/320087595_File_To_Image_Encryption_FTIE_Menggunakan_Algoritma_Randomized_Text_Dan_Arnold_Cat_Map_ACM_Untuk_Keamanan_Transmisi_Data_Digital) technique that makes use of
-[Randomized Text algorithm (RT)](https://s3.amazonaws.com/academia.edu.documents/46998494/Randomized_Text_Encryption_a_New_Dimensi20160704-24345-9laysm.pdf?AWSAccessKeyId=AKIAIWOWYYGZ2Y53UL3A&Expires=1515661445&Signature=GGievOHY%2FRvQcBoILP5nWSizts0%3D&response-content-disposition=inline%3B%20filename%3DRandomized_Text_Encryption_a_New_Dimensi.pdf)
-and [Arnold Cat Map algorithm (ACM)](https://en.wikipedia.org/wiki/Arnold%27s_cat_map)
-have a weakness in RT algorithm block and ACM algorithm block.
-Known plaintext attack that exploits a simple decryption equation
-in RT algorithm block can be applied to generate the key used in the encryption.
-This is could be done by FTIE-RT-ACM technique specifically in algorithm RT block
-that does not implement a keystream generator, that in term of encryption it is useful
-to keep the key safe.
-Furthermore, the use of ACM 1D algorithm in ACM algorithm block has no proof of correctness.
-
-This research proposes FTIE-RT-ACM technique implement keystream generator in
-RT algorithm block and ACM 2D in the ACM algorithm block.
-The keystream generator that will be used is [Blum Blum Shub (BBS) keystream generator algorithm](https://en.wikipedia.org/wiki/Blum_Blum_Shub).
-BBS proved that it is not easy to predict given polynomial time.
-Furthermore, the use of ACM 2D algorithm instead of ACM 1D algorithm gives more guarantee of
-the algorithm correctness.
-
-## Research Proposal in Indonesian
-For you who willing to know more about my research, I have already done the research proposal available in Indonesia only (sad).
-Not an Indonesian, just drop a request and I will work on it :D.
-The research proposal then available by contacting me (DM, tweet, mention or anything) via Twitter: [@SatriaHRHarsono](https://twitter.com/SatriaHRHarsono).
-
-## System Block Diagram
 ![System Block Diagram](docs/assets/system-block-diagram.png)
+Project description
 
-## Requirements
-- `python==3.6.4`
-- `nose==1.3.7`
-- `pylint==1.8.2`
-- other requirements will be written soon.
 
-## Run The Project
-Unfortunately, this project is not yet ready for production.
-But some of its units are available and tested through command `nosetests`.
+## Getting Started
 
-Documentation of each unit is not ready yet too and we are working on it :D
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 
-## Help
-And yes, I am begging for your help. Just making an issue is ok tho.
+### Prerequisites
+
+What things you need to install the software and how to install them
+Python 3.6
+Virtualenv
+```
+pip install virtualenv
+```
+
+### Installing
+
+Steps to follow:
+1. Clone this repo from master branch https://github.com/hafizhme/ftie-rt-acm
+2. From the root project directory, Create a directory for virtual environment
+3. Create virtual environment by `virtualenv your-env`
+4. Activate the virtual environment.
+	for linux : `source your-env/bin/activate`
+	for windows : `your-env\Scripts\activate.bat`
+5. Install all requirements by `pip install -r requirements.txt`
+6. Do command `nosetests` and make sure all test case passed.
+
+## Running the tests
+
+Explain how to run the automated tests for this system
+
+### Break down into end to end tests
+
+Explain what these tests test and why
+
+```
+Give an example
+```
+
+### And coding style tests
+
+Explain what these tests test and why
+
+```
+Give an example
+```
+
+## Deployment
+
+Add additional notes about how to deploy this on a live system
+
+## Built With
+
+* [astroid==1.6.1](https://github.com/PyCQA/astroid) - Abstract syntax tree for Python
+* [isort==4.3.3](https://github.com/timothycrosley/isort) - Python library to sort Python imports
+* [lazy-object-proxy==1.3.1](https://github.com/ionelmc/python-lazy-object-proxy) - A fast and thorough lazy object proxy.
+* [mccabe==0.6.1](https://github.com/pycqa/mccabe) -  Complexity checker for Python
+* [nose==1.3.7](https://github.com/nose-devs/nose) - nicer testing for python
+* [numpy==1.14.0](http://www.numpy.org/) - Array processing for numbers, strings, records, and objects.
+* [Pillow==5.0.0](https://python-pillow.org/) - Python Imaging Library
+* [pylint==1.8.2](https://www.pylint.org/) - Python code static checker
+* [six==1.11.0](https://github.com/benjaminp/six) - Python 2 and 3 compatibility utilities
+* [wrapt==1.10.11](https://github.com/GrahamDumpleton/wrapt) - Provide a transparent object proxy for Python
+
+## Authors
+
+* **Satria H R Harsono** - *Initial work* - [hafizhme](https://github.com/hafizhme)
+
+See also the list of [contributors](https://github.com/hafizhme/ftie-rt-acm/contributors) who participated in this project.
+
+## License
+
+This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) file for details
+
